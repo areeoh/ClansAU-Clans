@@ -1,0 +1,9 @@
+name: ClansAU-Clans
+main: com.areeoh.Clans
+version: 1.0
+author: ClansAU Team
+depend: [ClansAU-Core,ClansAU-Champions]
+commands:
+  clan:
+    aliases: [c]
+  map:
