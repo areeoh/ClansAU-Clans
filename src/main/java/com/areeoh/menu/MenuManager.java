@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MenuManager extends Manager<Module> {
 
-    private List<IMenu> menus;
+    private final List<IMenu> menus;
 
     public MenuManager(ClansAUCore plugin) {
         super(plugin, "MenuManager");

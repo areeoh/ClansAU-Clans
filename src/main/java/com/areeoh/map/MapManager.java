@@ -29,6 +29,7 @@ import java.util.*;
 public class MapManager extends Manager<Module> {
 
     private final NMSHandler nmsHandler;
+    //MERGE THESE TWO vvv
     public HashMap<UUID, Set<ChunkData>> clanMapData = new HashMap<>();
     public Map<UUID, MapSettings> mapSettingsMap = new HashMap<>();
 

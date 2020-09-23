@@ -13,7 +13,8 @@ import com.areeoh.map.MapManager;
 import com.areeoh.map.commands.MapCommandManager;
 import com.areeoh.menu.MenuManager;
 import com.areeoh.pillaging.PillageManager;
-import com.areeoh.scoreboard.ClanScoreboardManager;
+import com.areeoh.scoreboard.ClanScoreboard;
+import com.areeoh.scoreboard.ScoreboardManager;
 import com.areeoh.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,7 +25,7 @@ import java.util.Set;
 public class Clans extends JavaPlugin {
 
     private ClansAUCore clansAUCore;
-    private Set<Manager> managers = new HashSet<>();
+    private final Set<Manager> managers = new HashSet<>();
 
     @Override
     public void onEnable() {
@@ -33,6 +34,10 @@ public class Clans extends JavaPlugin {
         final ClanRepository module = new ClanRepository(clansAUCore.getManager(DatabaseManager.class));
         module.initialize(this);
         clansAUCore.getManager(DatabaseManager.class).addModule(module);
+
+        final ClanScoreboard clanScoreboard = new ClanScoreboard(clansAUCore.getManager(ScoreboardManager.class));
+        clanScoreboard.initialize(this);
+        clansAUCore.getManager(ScoreboardManager.class).addModule(clanScoreboard);
 
         registerManagers();
 
@@ -62,7 +67,6 @@ public class Clans extends JavaPlugin {
         managers.add(new ClanManager(clansAUCore));
         managers.add(new PillageManager(clansAUCore));
         managers.add(new FishingManager(clansAUCore));
-        managers.add(new ClanScoreboardManager(clansAUCore));
         managers.add(new MapManager(clansAUCore));
         managers.add(new ConfigManager(clansAUCore));
         managers.add(new MenuManager(clansAUCore));
