@@ -1,8 +1,8 @@
 name: ClansAU-Clans
-main: com.areeoh.Clans
+main: com.areeoh.clans.Clans
 version: 1.0
 author: ClansAU Team
-depend: [ClansAU-Core,ClansAU-Champions]
+depend: [ClansAU-Core]
 commands:
   clan:
     aliases: [c]
