@@ -28,7 +28,7 @@ public class ClanEnemyCommand extends Command<Player> {
             return false;
         }
         if(!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
-            UtilMessage.message(player, "Clans", "You must be an admin or higher to enemy a Clan.");
+            UtilMessage.message(player, "Clans", "You must be an Admin or higher to enemy a Clan.");
             return false;
         }
         final Clan target = getManager(ClanManager.class).searchClan(player, args[1], true);
@@ -43,6 +43,7 @@ public class ClanEnemyCommand extends Command<Player> {
             UtilMessage.message(player, "Clans", "You are already enemies with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
             return false;
         }
+        
         if(getManager(PillageManager.class).isPillaging(clan, target) || getManager(PillageManager.class).isPillaged(clan, target)) {
             UtilMessage.message(player, "Clans", "You cannot enemy " + ChatColor.LIGHT_PURPLE + "Clan " + target.getName() + ChatColor.GRAY + " while a Pillage is active.");
             return false;
@@ -53,6 +54,6 @@ public class ClanEnemyCommand extends Command<Player> {
 
     @Override
     public void invalidArgsRequired(Player sender) {
-        UtilMessage.message(sender, "Clans", "You did not input a Clan to enemy.");
+        UtilMessage.message(sender, "Clans", "You did not input a Clan to Enemy.");
     }
 }
