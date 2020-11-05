@@ -39,7 +39,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         other.getAllianceMap().put(clan.getName(), false);
         UtilMessage.message(event.getPlayer(), "Clans", "You have accepted alliance with " + getManager(ClanManager.class).getClanRelation(clan, other).getSuffix() + "Clan " + other.getName() + ChatColor.GRAY + ".");
         other.inform(true, "Clans", getManager(ClanManager.class).getClanRelation(clan, other).getSuffix() + "Clan " + clan.getName() + ChatColor.GRAY + " has accepted alliance with your Clan.");
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " has accepted alliance with your Clan.", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has accepted alliance with your Clan.", player.getUniqueId());
 
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateAlliances(clan);
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateAlliances(other);
@@ -57,7 +57,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         //TODO UPDATE SCOREBOARD
         clan.getClaims().add(UtilFormat.chunkToString(chunk));
         UtilMessage.message(player, "Clans", "You claimed land " + ChatColor.YELLOW + "(" + chunk.getX() + "," + chunk.getZ() + ")" + ChatColor.GRAY + ".");
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " claimed land " + ChatColor.YELLOW + "(" + chunk.getX() + "," + chunk.getZ() + ")" + ChatColor.GRAY + ".", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " claimed land " + ChatColor.YELLOW + "(" + chunk.getX() + "," + chunk.getZ() + ")" + ChatColor.GRAY + ".", player.getUniqueId());
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateClaims(clan);
     }
 
@@ -83,8 +83,8 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         final OfflineClient target = event.getTarget();
         final Clan clan = event.getClan();
         clan.getMemberMap().put(target.getUUID(), Clan.MemberRole.values()[clan.getMemberRole(target.getUUID()).ordinal() - 1]);
-        UtilMessage.message(player, "Clans", "You demoted " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " to " + ChatColor.GREEN + UtilFormat.cleanString(clan.getMemberRole(target.getUUID()).name()) + ChatColor.GRAY + ".");
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " demoted " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " to " + ChatColor.GREEN + UtilFormat.cleanString(clan.getMemberRole(target.getUUID()).name()) + ChatColor.GRAY + ".", player.getUniqueId());
+        UtilMessage.message(player, "Clans", "You demoted " + ChatColor.AQUA + target.getName() + ChatColor.GRAY + " to " + ChatColor.GREEN + UtilFormat.cleanString(clan.getMemberRole(target.getUUID()).name()) + ChatColor.GRAY + ".");
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " demoted " + ChatColor.AQUA + target.getName() + ChatColor.GRAY + " to " + ChatColor.GREEN + UtilFormat.cleanString(clan.getMemberRole(target.getUUID()).name()) + ChatColor.GRAY + ".", player.getUniqueId());
 
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateMembers(clan);
     }
@@ -123,7 +123,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         target.getEnemyMap().put(clan.getName(), 0);
         UtilMessage.message(player, "Clans", "You waged war with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
         target.inform(true, "Clans", getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + clan.getName() + ChatColor.GRAY + " waged war with your Clan.");
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " waged war with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " waged war with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
 
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateEnemies(clan);
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateEnemies(target);
@@ -151,9 +151,9 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         final Player target = event.getTarget();
 
         clan.getInviteeMap().put(target.getUniqueId(), System.currentTimeMillis());
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " invited " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " to the Clan.", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " invited " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " to the Clan.", player.getUniqueId());
         UtilMessage.message(player, "Clans", "You invited " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " to " + ChatColor.YELLOW + "Clan " + clan.getName() + ChatColor.GRAY + ".");
-        UtilMessage.message(target, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " has invited you to join " + ChatColor.YELLOW + "Clan " + clan.getName() + ChatColor.GRAY + ".");
+        UtilMessage.message(target, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has invited you to join " + ChatColor.YELLOW + "Clan " + clan.getName() + ChatColor.GRAY + ".");
         //TODO ADD FANCY MESSAGE HERE CLICKABLE TEXT
     }
 
@@ -188,7 +188,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         if (Bukkit.getPlayer(target.getUUID()) != null) {
             UtilMessage.message(Bukkit.getPlayer(target.getUUID()), "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " kicked you from " + ChatColor.YELLOW + "Clan " + clan.getName() + ChatColor.GRAY + ".");
         }
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " kicked " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " from the Clan.", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " kicked " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " from the Clan.", player.getUniqueId());
 
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateMembers(clan);
     }
@@ -227,7 +227,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
             return;
         }
         UtilMessage.message(player, "Clans", "You have accepted neutrality with " + ChatColor.YELLOW + "Clan " + target.getName() + ChatColor.GRAY + ".");
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " accepted neutrality with " + ChatColor.YELLOW + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " accepted neutrality with " + ChatColor.YELLOW + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
         target.inform(true, "Clans", ChatColor.YELLOW + "Clan " + clan.getName() + ChatColor.GRAY + " has accepted neutrality with your Clan.");
         target.getAllianceRequestMap().remove(clan.getName());
         clan.getAllianceRequestMap().remove(target.getName());
@@ -251,7 +251,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         }
         clan.getMemberMap().put(target.getUUID(), Clan.MemberRole.values()[clan.getMemberRole(target.getUUID()).ordinal() + 1]);
         UtilMessage.message(player, "Clans", "You promoted " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " to " + ChatColor.GREEN + UtilFormat.cleanString(clan.getMemberRole(target.getUUID()).name()) + ChatColor.GRAY + ".");
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " promoted " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " to " + ChatColor.GREEN + UtilFormat.cleanString(clan.getMemberRole(target.getUUID()).name()) + ChatColor.GRAY + ".", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " promoted " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " to " + ChatColor.GREEN + UtilFormat.cleanString(clan.getMemberRole(target.getUUID()).name()) + ChatColor.GRAY + ".", player.getUniqueId());
 
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateMembers(clan);
     }
@@ -266,7 +266,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
 
         clan.setHome(player.getLocation().getBlock().getLocation());
         UtilMessage.message(player, "Clans", "You set the Clan Home at " + ChatColor.YELLOW + "(" + (int) player.getLocation().getX() + "," + (int) player.getLocation().getZ() + ")" + ChatColor.GRAY + ".");
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " has set the Clan Home at " + ChatColor.YELLOW + "(" + (int) player.getLocation().getX() + "," + (int) player.getLocation().getZ() + ")" + ChatColor.GRAY + ".", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has set the Clan Home at " + ChatColor.YELLOW + "(" + (int) player.getLocation().getX() + "," + (int) player.getLocation().getZ() + ")" + ChatColor.GRAY + ".", player.getUniqueId());
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateHome(clan);
     }
 
@@ -285,7 +285,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         target.getAllianceMap().put(clan.getName(), true);
 
         UtilMessage.message(player, "Clans", "You have accepted trust with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " accepted trust with your Clan.", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " accepted trust with your Clan.", player.getUniqueId());
         target.inform(true, "Clans", getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + clan.getName() + ChatColor.GRAY + " has accepted trust with your Clan.");
         
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateAlliances(clan);
@@ -304,7 +304,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         clan.getAllianceMap().put(target.getName(), false);
         target.getAllianceMap().put(clan.getName(), false);
         UtilMessage.message(player, "Clans", "You have revoked trust with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " has revoked trust with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has revoked trust with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
         target.inform(true, "Clans", getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + clan.getName() + ChatColor.GRAY + " has revoked trust with your Clan.");
 
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateAlliances(clan);
@@ -327,7 +327,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         }
         clan.getClaims().remove(UtilFormat.chunkToString(player.getLocation().getChunk()));
         UtilMessage.message(player, "Clans", "You unclaimed land " + ChatColor.YELLOW + "(" + player.getLocation().getChunk().getX() + "," + ChatColor.YELLOW + player.getLocation().getChunk().getZ() + ChatColor.YELLOW + ")" + ChatColor.GRAY + ".");
-        clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " unclaimed land " + ChatColor.YELLOW + "(" + player.getLocation().getChunk().getX() + "," + player.getLocation().getChunk().getZ() + ")" + ChatColor.GRAY + ".", player.getUniqueId());
+        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " unclaimed land " + ChatColor.YELLOW + "(" + player.getLocation().getChunk().getX() + "," + player.getLocation().getChunk().getZ() + ")" + ChatColor.GRAY + ".", player.getUniqueId());
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateClaims(clan);
     }
 }
