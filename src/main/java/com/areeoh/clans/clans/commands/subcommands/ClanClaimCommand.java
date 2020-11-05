@@ -49,7 +49,7 @@ public class ClanClaimCommand extends Command<Player> {
             }
         }
         if(clan.getClaims().contains(UtilFormat.chunkToString(player.getLocation().getChunk()))) {
-            UtilMessage.message(player, "Clans", "Your Clan already owns this territory.");
+            UtilMessage.message(player, "Clans", "Your Clan already owns this land.");
             return false;
         }
         final Clan target = getManager(ClanManager.class).getClan(player.getLocation().getChunk());
