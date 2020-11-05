@@ -2,10 +2,10 @@ package com.areeoh.clans.game.listeners;
 
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
-import com.areeoh.core.client.Client;
-import com.areeoh.core.client.ClientManager;
-import com.areeoh.core.framework.updater.Update;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.client.Client;
+import com.areeoh.spigot.core.client.ClientManager;
+import com.areeoh.spigot.core.framework.updater.Update;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ public class HandleOnlineRewards extends GameModule implements Listener {
     @Update(ticks = 72000)
     public void HourlyReward() {
         for (Player online : Bukkit.getOnlinePlayers()) {
-            final Client client = getManager(ClientManager.class).getClient(online.getUniqueId());
+            final Client client = getManager(ClientManager.class).getOnlineClient(online.getUniqueId());
             if (client != null) {
                 //client.getGamer().addCoins(2000);
                 //getManager(ClanScoreboardManager.class).getModule(SideBarHandler.class).updateSidebar(online);

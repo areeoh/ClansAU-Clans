@@ -2,9 +2,9 @@ package com.areeoh.clans.fishing;
 
 import com.areeoh.clans.fishing.listeners.FishingListener;
 import com.areeoh.clans.fishing.listeners.HandleFishingPlayer;
-import com.areeoh.core.framework.Manager;
-import com.areeoh.core.framework.Module;
-import com.areeoh.core.framework.Plugin;
+import com.areeoh.spigot.core.framework.Manager;
+import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.core.framework.Plugin;
 
 public class FishingManager extends Manager<Module> {
 

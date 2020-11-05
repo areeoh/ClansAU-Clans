@@ -6,10 +6,10 @@ import com.areeoh.clans.clans.events.ClanPillageStartEvent;
 import com.areeoh.clans.pillaging.listeners.PillageAnnouncer;
 import com.areeoh.clans.pillaging.listeners.PillageDeathListener;
 import com.areeoh.clans.pillaging.listeners.PillageListener;
-import com.areeoh.core.database.DatabaseManager;
-import com.areeoh.core.framework.Manager;
-import com.areeoh.core.framework.Module;
-import com.areeoh.core.framework.Plugin;
+import com.areeoh.spigot.core.framework.Manager;
+import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.core.framework.Plugin;
+import com.areeoh.spigot.core.repository.RepositoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -42,8 +42,8 @@ public class PillageManager extends Manager<Module> {
                 dead.inform(true, "Clans", "Your Clan lost Dominance against " + ChatColor.RED + "Clan " + killer.getName() + " " + dead.getDominanceString(killer) + ChatColor.GRAY + ".");
                 killer.inform(true, "Clans", "Your Clan recovered Dominance against " + ChatColor.RED + "Clan " + dead.getName() + " " + killer.getDominanceString(dead) + ChatColor.GRAY + ".");
             }
-            getManager(DatabaseManager.class).getModule(ClanRepository.class).updateEnemies(killer);
-            getManager(DatabaseManager.class).getModule(ClanRepository.class).updateEnemies(dead);
+            getManager(RepositoryManager.class).getModule(ClanRepository.class).updateEnemies(killer);
+            getManager(RepositoryManager.class).getModule(ClanRepository.class).updateEnemies(dead);
             if(killer.getEnemyMap().get(dead.getName()) >= 16) {
                 Bukkit.getServer().getPluginManager().callEvent(new ClanPillageStartEvent(killer, dead));
             }

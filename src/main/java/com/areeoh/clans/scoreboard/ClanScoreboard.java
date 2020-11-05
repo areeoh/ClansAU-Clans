@@ -4,12 +4,13 @@ import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
 import com.areeoh.clans.clans.events.*;
 import com.areeoh.clans.clans.listeners.ClanMovementListener;
-import com.areeoh.core.client.Client;
-import com.areeoh.core.client.ClientManager;
-import com.areeoh.core.client.Rank;
-import com.areeoh.core.scoreboard.ScoreboardManager;
-import com.areeoh.core.scoreboard.ScoreboardPriority;
-import com.areeoh.core.scoreboard.data.PlayerScoreboard;
+import com.areeoh.spigot.core.client.Client;
+import com.areeoh.spigot.core.client.ClientManager;
+import com.areeoh.spigot.core.client.Rank;
+import com.areeoh.spigot.core.client.events.ClientJoinEvent;
+import com.areeoh.spigot.core.scoreboard.ScoreboardManager;
+import com.areeoh.spigot.core.scoreboard.ScoreboardPriority;
+import com.areeoh.spigot.core.scoreboard.data.PlayerScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -17,7 +18,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scoreboard.*;
 
 import java.util.UUID;
@@ -84,7 +84,7 @@ public class ClanScoreboard extends PlayerScoreboard implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onClientJoinEvent(ClientJoinEvent event) {
         updateSideBar(event.getPlayer());
     }
 
@@ -164,7 +164,7 @@ public class ClanScoreboard extends PlayerScoreboard implements Listener {
         final Player target = Bukkit.getPlayer(event.getTarget().getUUID());
         if (target != null) {
             event.getClan().getOnlinePlayers().forEach(this::updateSideBar);
-            removePlayer(event.getPlayer());
+            removePlayer(target);
         }
     }
 
@@ -276,8 +276,8 @@ public class ClanScoreboard extends PlayerScoreboard implements Listener {
         }
         for (Player online : Bukkit.getOnlinePlayers()) {
             if (getManager(ClanManager.class).getClan(online.getUniqueId()) == null) {
-                if (getManager(ClientManager.class).getClient(online.getUniqueId()).hasRank(Rank.MEDIA, false)) {
-                    updateRank(player);
+                if (getManager(ClientManager.class).getOnlineClient(online.getUniqueId()).hasRank(Rank.MEDIA, false)) {
+                    updateRank(online);
                     continue;
                 }
                 if (scoreboard.getTeam(noneTeam) == null) {
@@ -290,7 +290,7 @@ public class ClanScoreboard extends PlayerScoreboard implements Listener {
     }
 
     private void updateRank(Player player) {
-        final Client client = getManager(ClientManager.class).getClient(player.getUniqueId());
+        final Client client = getManager(ClientManager.class).getOnlineClient(player.getUniqueId());
         if (client.hasRank(Rank.MEDIA, false)) {
             for (Player online : Bukkit.getOnlinePlayers()) {
                 Scoreboard scoreboard = online.getScoreboard();

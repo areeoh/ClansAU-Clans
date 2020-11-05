@@ -1,9 +1,9 @@
 package com.areeoh.clans.map;
 
-import com.areeoh.core.framework.Manager;
-import com.areeoh.core.framework.Module;
-import com.areeoh.core.framework.Plugin;
-import com.areeoh.core.utility.UtilTime;
+import com.areeoh.spigot.core.framework.Manager;
+import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.core.framework.Plugin;
+import com.areeoh.spigot.core.utility.UtilTime;
 import com.areeoh.clans.map.data.ChunkData;
 import com.areeoh.clans.map.data.MapPixel;
 import com.areeoh.clans.map.data.MapSettings;
@@ -60,7 +60,6 @@ public class MapManager extends Manager<Module> {
 
             file.createNewFile();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -80,6 +79,9 @@ public class MapManager extends Manager<Module> {
     }
 
     private void deleteFolder(File folder) {
+        if(!folder.exists()) {
+            return;
+        }
         File[] files = folder.listFiles();
         if (files != null) { //some JVMs return null for empty dirs
             for (File f : files) {

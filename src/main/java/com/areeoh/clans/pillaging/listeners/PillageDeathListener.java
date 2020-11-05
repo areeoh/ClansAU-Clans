@@ -2,7 +2,7 @@ package com.areeoh.clans.pillaging.listeners;
 
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.core.framework.Module;
+import com.areeoh.spigot.core.framework.Module;
 import com.areeoh.clans.pillaging.PillageManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

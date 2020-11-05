@@ -5,8 +5,8 @@ import com.areeoh.champions.skills.events.SkillChangeBlockEvent;
 import com.areeoh.champions.skills.events.SkillEffectEntityEvent;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.core.framework.Module;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,7 +29,7 @@ public class ClanSkillListener extends Module<ClanManager> implements Listener {
     @EventHandler
     public void onSkillBlockEffect(SkillChangeBlockEvent event) {
         Clan clan = getManager().getClan(event.getBlock().getLocation());
-        if(clan != null && clan.isAdmin()) {
+        if(clan != null && clan.isAdmin() && clan.isSafe(event.getBlock().getLocation())) {
             event.setCancelled(true);
         }
     }

@@ -1,7 +1,7 @@
 package com.areeoh.clans.clans.events;
 
 import com.areeoh.clans.clans.Clan;
-import com.areeoh.core.client.Client;
+import com.areeoh.spigot.core.client.OfflineClient;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -12,16 +12,16 @@ public class ClanKickEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private boolean isCancelled;
-    private final Client target;
+    private final OfflineClient target;
     private final Clan clan;
 
-    public ClanKickEvent(Player player, Client target, Clan clan) {
+    public ClanKickEvent(Player player, OfflineClient target, Clan clan) {
         super(player);
         this.target = target;
         this.clan = clan;
     }
 
-    public Client getTarget() {
+    public OfflineClient getTarget() {
         return target;
     }
 

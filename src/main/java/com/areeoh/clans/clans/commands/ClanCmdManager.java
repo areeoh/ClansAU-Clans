@@ -3,10 +3,10 @@ package com.areeoh.clans.clans.commands;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
 import com.areeoh.clans.clans.commands.subcommands.*;
-import com.areeoh.core.framework.Plugin;
-import com.areeoh.core.framework.commands.Command;
-import com.areeoh.core.framework.commands.CommandManager;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.framework.Plugin;
+import com.areeoh.spigot.core.framework.commands.Command;
+import com.areeoh.spigot.core.framework.commands.CommandManager;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,7 +41,6 @@ public class ClanCmdManager extends CommandManager {
         addModule(new ClanHomeCommand(this));
         addModule(new ClanSetHomeCommand(this));
         addModule(new ClanMapCommand(this));
-        addModule(new ClanReloadCommand(this));
     }
 
     class BaseCommand extends Command<Player> {

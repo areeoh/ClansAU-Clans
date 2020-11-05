@@ -2,11 +2,11 @@ package com.areeoh.clans.clans.listeners;
 
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.core.blockregen.BlockRegenManager;
-import com.areeoh.core.blockregen.listeners.BlockRegenHandler;
-import com.areeoh.core.framework.Module;
-import com.areeoh.core.framework.Primitive;
-import com.areeoh.core.utility.UtilMath;
+import com.areeoh.spigot.core.blockregen.BlockRegenManager;
+import com.areeoh.spigot.core.blockregen.listeners.BlockRegenHandler;
+import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.core.framework.Primitive;
+import com.areeoh.spigot.core.utility.UtilMath;
 import javafx.util.Pair;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

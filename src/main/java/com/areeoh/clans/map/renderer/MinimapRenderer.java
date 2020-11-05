@@ -9,7 +9,7 @@ import com.areeoh.clans.map.events.MinimapPlayerCursorEvent;
 import com.areeoh.clans.map.nms.INMSHandler;
 import com.areeoh.clans.map.nms.MaterialMapColorInterface;
 import com.areeoh.clans.map.nms.NMSHandler;
-import com.areeoh.core.utility.UtilMath;
+import com.areeoh.spigot.core.utility.UtilMath;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -63,8 +63,6 @@ public class MinimapRenderer extends MapRenderer implements Listener {
 
         final boolean hasMoved = mapManager.hasMoved(player);
 
-        final double size = player.getWorld().getWorldBorder().getSize();
-
         if (hasMoved || mapSettings.isUpdate()) {
             for (int i = 0; i < 128; i++) {
                 for (int j = 0; j < 128; j++) {
@@ -101,8 +99,10 @@ public class MinimapRenderer extends MapRenderer implements Listener {
                             cacheMap.put(x, new TreeMap<>());
                         }
                         if (!cacheMap.get(x).containsKey(z)) {
+                            //IF WANT HEIGHT LIMIT JUST CHANGE THIS
+                            int y = player.getWorld().getHighestBlockYAt(x, z) + 1;
 
-                            Block b = player.getWorld().getBlockAt(x, player.getWorld().getHighestBlockYAt(x, z), z);
+                            Block b = player.getWorld().getBlockAt(x, y, z);
 
                             if (!b.getChunk().isLoaded()) {
                                 continue;

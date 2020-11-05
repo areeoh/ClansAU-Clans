@@ -1,8 +1,8 @@
 package com.areeoh.clans.game.commands;
 
-import com.areeoh.core.ClansAUCore;
-import com.areeoh.core.framework.commands.Command;
-import com.areeoh.core.framework.commands.CommandManager;
+import com.areeoh.spigot.core.ClansAUCore;
+import com.areeoh.spigot.core.framework.commands.Command;
+import com.areeoh.spigot.core.framework.commands.CommandManager;
 import org.bukkit.entity.Player;
 
 public class FlyCommand extends CommandManager {

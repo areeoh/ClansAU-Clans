@@ -2,11 +2,11 @@ package com.areeoh.clans.clans.listeners;
 
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.core.client.Client;
-import com.areeoh.core.client.ClientManager;
-import com.areeoh.core.framework.Module;
-import com.areeoh.core.utility.UtilFormat;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.client.Client;
+import com.areeoh.spigot.core.client.ClientManager;
+import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.core.utility.UtilFormat;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import com.areeoh.clans.pillaging.PillageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -35,8 +35,8 @@ public class ClanBreakBlockListener extends Module<ClanManager> implements Liste
         final Player player = event.getPlayer();
         final Clan clan = getManager().getClan(player.getUniqueId());
         if(!lClan.equals(clan)) {
-            final Client client = getManager(ClientManager.class).getClient(player.getUniqueId());
-            //if(!client.isAdministrating() && !lClan.isAdmin() && CHECK IF FARMING BLOCK) {
+            final Client client = getManager(ClientManager.class).getOnlineClient(player.getUniqueId());
+            //TODO if(!client.isAdministrating() && !lClan.isAdmin() && CHECK IF FARMING BLOCK) {
             if(client.isAdministrating()) {
                 return;
             }

@@ -2,10 +2,10 @@ package com.areeoh.clans.game.energy;
 
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
-import com.areeoh.core.client.ClientManager;
-import com.areeoh.core.framework.updater.Update;
-import com.areeoh.core.framework.updater.Updater;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.client.ClientManager;
+import com.areeoh.spigot.core.framework.updater.Update;
+import com.areeoh.spigot.core.framework.updater.Updater;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -44,7 +44,7 @@ public class Energy extends GameModule implements IEnergy, Listener, Updater {
 
     @Override
     public boolean use(Player player, String ability, double amount, boolean inform) {
-        if (getManager(ClientManager.class).getClient(player.getUniqueId()).isAdministrating()) {
+        if (getManager(ClientManager.class).getOnlineClient(player.getUniqueId()).isAdministrating()) {
             return true;
         }
         amount = 0.999D * (amount / 100.0D);
@@ -54,7 +54,7 @@ public class Energy extends GameModule implements IEnergy, Listener, Updater {
             }
             return false;
         }
-        if (!getManager(ClientManager.class).getClient(player.getUniqueId()).isAdministrating()) {
+        if (!getManager(ClientManager.class).getOnlineClient(player.getUniqueId()).isAdministrating()) {
             degenerateEnergy(player, amount);
         }
         return true;

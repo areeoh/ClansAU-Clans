@@ -1,13 +1,14 @@
 package com.areeoh.clans.clans;
 
 import com.areeoh.clans.clans.listeners.*;
-import com.areeoh.core.client.Client;
-import com.areeoh.core.client.ClientManager;
-import com.areeoh.core.framework.Manager;
-import com.areeoh.core.framework.Module;
-import com.areeoh.core.framework.Plugin;
-import com.areeoh.core.utility.UtilFormat;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.client.Client;
+import com.areeoh.spigot.core.client.ClientManager;
+import com.areeoh.spigot.core.client.OfflineClient;
+import com.areeoh.spigot.core.framework.Manager;
+import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.core.framework.Plugin;
+import com.areeoh.spigot.core.utility.UtilFormat;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import com.areeoh.clans.pillaging.PillageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -125,9 +126,9 @@ public class ClanManager extends Manager<Module> {
         PILLAGE_NO_ACCESS(ChatColor.DARK_PURPLE, ChatColor.LIGHT_PURPLE, (byte) 65),
         ADMIN(ChatColor.WHITE, ChatColor.WHITE, (byte) 58);
 
-        private ChatColor prefix;
-        private ChatColor suffix;
-        private byte mapColor;
+        private final ChatColor prefix;
+        private final ChatColor suffix;
+        private final byte mapColor;
 
         ClanRelation(ChatColor prefix, ChatColor suffix, byte mapColor) {
             this.prefix = prefix;
@@ -197,7 +198,7 @@ public class ClanManager extends Manager<Module> {
         }
         ArrayList<Clan> clanList = new ArrayList<>(clanSet);
         clanList.removeIf(clan -> !clan.getName().toLowerCase().contains(input.toLowerCase()));
-        final Client client = getManager(ClientManager.class).searchClient(player, input, false);
+        final OfflineClient client = getManager(ClientManager.class).searchClient(player, input, false);
         if (client != null) {
             final Clan clan = getClan(client.getUUID());
             if (clan != null) {
@@ -234,9 +235,9 @@ public class ClanManager extends Manager<Module> {
 
     public String getMemberString(Clan clan) {
         return clan.getMemberMap().entrySet().stream().map(entry -> {
-            Client client = getManager(ClientManager.class).getClient(entry.getKey());
+            OfflineClient client = getManager(ClientManager.class).getOfflineClient(entry.getKey());
 
-            return ChatColor.YELLOW + entry.getValue().name().substring(0, 1) + ChatColor.WHITE + "." + (client.isOnline() ? ChatColor.GREEN : ChatColor.RED) + client.getName();
+            return ChatColor.YELLOW + entry.getValue().name().substring(0, 1) + ChatColor.WHITE + "." + (client instanceof Client ? ChatColor.GREEN : ChatColor.RED) + client.getName();
         }).collect(Collectors.joining(ChatColor.GRAY + ", "));
     }
 
@@ -248,9 +249,9 @@ public class ClanManager extends Manager<Module> {
     }
 
     public String getAllianceString(Clan clan, Clan other) {
-        return other.getAllianceMap().entrySet().stream().map(entry -> {
-            final ClanRelation clanRelation = getClanRelation(clan, getClan(entry.getKey()));
-            return clanRelation.getSuffix() + entry.getKey();
+        return other.getAllianceMap().keySet().stream().map(aBoolean -> {
+            final ClanRelation clanRelation = getClanRelation(clan, getClan(aBoolean));
+            return clanRelation.getSuffix() + aBoolean;
         }).collect(Collectors.joining(ChatColor.GRAY + ", "));
     }
 

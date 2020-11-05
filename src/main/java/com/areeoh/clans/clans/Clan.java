@@ -1,6 +1,6 @@
 package com.areeoh.clans.clans;
 
-import com.areeoh.core.utility.UtilTime;
+import com.areeoh.spigot.core.utility.UtilTime;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

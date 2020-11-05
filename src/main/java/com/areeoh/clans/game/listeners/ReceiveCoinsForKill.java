@@ -2,10 +2,10 @@ package com.areeoh.clans.game.listeners;
 
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
-import com.areeoh.core.client.Client;
-import com.areeoh.core.client.ClientManager;
-import com.areeoh.core.utility.UtilMath;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.client.Client;
+import com.areeoh.spigot.core.client.ClientManager;
+import com.areeoh.spigot.core.utility.UtilMath;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,7 +30,7 @@ public class ReceiveCoinsForKill extends GameModule implements Listener {
             return;
         }
         final Player killer = event.getEntity().getKiller();
-        final Client client = getManager(ClientManager.class).getClient(killer.getUniqueId());
+        final Client client = getManager(ClientManager.class).getOnlineClient(killer.getUniqueId());
         final int amount = UtilMath.randomInt((int) (event.getEntity().getMaxHealth() * 14), (int) (event.getEntity().getMaxHealth() * 20));
         //client.getGamer().addCoins(amount);
         //getManager(ClanScoreboardManager.class).getModule(SideBarHandler.class).updateSideBar(killer);

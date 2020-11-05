@@ -2,8 +2,8 @@ package com.areeoh.clans.game.listeners;
 
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
-import com.areeoh.core.client.ClientManager;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.client.ClientManager;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -19,7 +19,7 @@ public class DisableBucket extends GameModule implements Listener {
 
     @EventHandler
     public void handleBucket(PlayerBucketEmptyEvent event) {
-        if (getManager(ClientManager.class).getClient(event.getPlayer().getUniqueId()).isAdministrating()) {
+        if (getManager(ClientManager.class).getOnlineClient(event.getPlayer().getUniqueId()).isAdministrating()) {
             return;
         }
         event.setCancelled(true);
@@ -30,7 +30,7 @@ public class DisableBucket extends GameModule implements Listener {
 
     @EventHandler
     public void handleBucket(PlayerBucketFillEvent event) {
-        if (getManager(ClientManager.class).getClient(event.getPlayer().getUniqueId()).isAdministrating()) {
+        if (getManager(ClientManager.class).getOnlineClient(event.getPlayer().getUniqueId()).isAdministrating()) {
             return;
         }
         event.setCancelled(true);

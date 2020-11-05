@@ -1,224 +1,203 @@
 package com.areeoh.clans.clans;
 
-import com.areeoh.core.database.DatabaseManager;
-import com.areeoh.core.database.DatabaseTypes;
-import com.areeoh.core.framework.Module;
-import com.areeoh.core.framework.Plugin;
+import com.areeoh.spigot.core.framework.Repository;
+import com.areeoh.spigot.core.repository.DeleteQuery;
+import com.areeoh.spigot.core.repository.InsertQuery;
+import com.areeoh.spigot.core.repository.RepositoryManager;
+import com.areeoh.spigot.core.repository.UpdateQuery;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class ClanRepository extends Module<DatabaseManager> {
+public class ClanRepository extends Repository {
 
-    public ClanRepository(DatabaseManager manager) {
+    public ClanRepository(RepositoryManager manager) {
         super(manager, "ClanRepository");
     }
 
     @Override
-    public synchronized void initialize(Plugin javaPlugin) {
-        super.initialize(javaPlugin);
-        new BukkitRunnable() {
-            public void run() {
-                getManager().getModule(ClanRepository.class).loadClans();
+    public synchronized void onEnable() {
+        FindIterable<Document> documents = getMongoCollection().find();
+        for (Document document : documents) {
+            String name = document.getString("name");
+            Clan clan = new Clan(name);
+
+            Long age = document.getLong("age");
+            Document home = (Document) document.get("home");
+            String world = home.getString("world");
+            Double x = home.getDouble("x");
+            Double y = home.getDouble("y");
+            Double z = home.getDouble("z");
+            Double pitch = home.getDouble("pitch");
+            Double yaw = home.getDouble("yaw");
+            if(world != null && x != null && y != null && z != null && pitch != null && yaw != null) {
+                clan.setHome(new Location(Bukkit.getWorld(world), x, y, z, pitch.floatValue(), yaw.floatValue()));
             }
-        }.runTaskAsynchronously(javaPlugin);
+            int energy = document.getInteger("energy");
+            Boolean admin = document.getBoolean("admin");
+            Boolean safe = document.getBoolean("safe");
+
+            clan.setAge(age);
+            clan.setEnergy(energy);
+            clan.setAdmin(admin);
+            clan.setSafe(safe);
+
+            List<String> claims = document.getList("claims", String.class);
+            clan.getClaims().addAll(claims);
+
+            List<Document> members = (List<Document>) document.get("members");
+            for (Document member : members) {
+                clan.getMemberMap().put(UUID.fromString(member.getString("uuid")), Clan.MemberRole.valueOf(member.getString("role")));
+            }
+
+            List<Document> alliances = (List<Document>) document.get("alliances");
+            for (Document alliance : alliances) {
+                clan.getAllianceMap().put(alliance.getString("other"), alliance.getBoolean("trusted"));
+            }
+
+            List<Document> enemies = (List<Document>) document.get("enemies");
+            for (Document enemy : enemies) {
+                clan.getEnemyMap().put(enemy.getString("other"), enemy.getInteger("points"));
+            }
+
+            getManager(ClanManager.class).addClan(clan);
+        }
     }
 
     public void saveClan(Clan clan) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name", clan.getName());
-        jsonObject.put("age", clan.getAge());
-
-        JSONObject homeObject = new JSONObject();
-        homeObject.put("world", clan.getHome() == null ? null : clan.getHome().getWorld().getName());
-        homeObject.put("x", clan.getHome() == null ? null : clan.getHome().getX());
-        homeObject.put("y", clan.getHome() == null ? null : clan.getHome().getY());
-        homeObject.put("z", clan.getHome() == null ? null : clan.getHome().getZ());
-        homeObject.put("pitch", clan.getHome() == null ? null : clan.getHome().getPitch());
-        homeObject.put("yaw", clan.getHome() == null ? null : clan.getHome().getYaw());
-
-        jsonObject.put("home", homeObject);
-        jsonObject.put("energy", clan.getEnergy());
-        jsonObject.put("admin", clan.isAdmin());
-        jsonObject.put("safe", clan.isSafe());
-
-        JSONArray claims = new JSONArray();
-        claims.addAll(clan.getClaims());
-        jsonObject.put("territory", claims);
-
-        JSONArray members = new JSONArray();
+        Document document = new Document();
+        document.append("name", clan.getName());
+        document.append("age", clan.getAge());
+        Document homeObject = new Document();
+        homeObject.append("world", clan.getHome() == null ? null : clan.getHome().getWorld());
+        homeObject.append("x", clan.getHome() == null ? null : clan.getHome().getX());
+        homeObject.append("y", clan.getHome() == null ? null : clan.getHome().getY());
+        homeObject.append("z", clan.getHome() == null ? null : clan.getHome().getZ());
+        homeObject.append("pitch", clan.getHome() == null ? null : clan.getHome().getPitch());
+        homeObject.append("yaw", clan.getHome() == null ? null : clan.getHome().getYaw());
+        document.append("home", homeObject);
+        document.append("energy", clan.getEnergy());
+        document.append("admin", clan.isAdmin());
+        document.append("safe", clan.isSafe());
+        document.append("claims", clan.getClaims());
+        List<Object> members = new ArrayList<>();
         clan.getMemberMap().forEach((uuid, memberRole) -> {
-            final JSONObject member = new JSONObject();
-            member.put("uuid", uuid.toString());
-            member.put("role", memberRole.name());
+            Document member = new Document();
+            member.append("uuid", uuid.toString());
+            member.append("role", memberRole.name());
             members.add(member);
         });
-        jsonObject.put("members", members);
+        document.append("members", members);
 
-        JSONArray alliances = new JSONArray();
-        clan.getAllianceMap().forEach((other, trusted) -> {
-            final JSONObject alliance = new JSONObject();
-            alliance.put("other", other);
-            alliance.put("trusted", trusted);
+        List<Object> alliances = new ArrayList<>();
+        clan.getAllianceMap().forEach((s, aBoolean) -> {
+            Document alliance = new Document();
+            alliance.append("other", s);
+            alliance.append("trusted", aBoolean);
             alliances.add(alliance);
         });
-        jsonObject.put("alliance", alliances);
+        document.append("alliances", alliances);
 
-        JSONArray enemies = new JSONArray();
+        List<Object> enemies = new ArrayList<>();
         clan.getEnemyMap().forEach((s, integer) -> {
-            final JSONObject enemy = new JSONObject();
-            enemy.put("other", s);
-            enemy.put("trusted", integer);
-            enemies.add(enemy);
+            Document enemy = new Document();
+            enemy.append("other", s);
+            enemy.append("points", integer);
         });
-        jsonObject.put("enemies", enemies);
+        document.append("enemies", enemies);
 
-        try (FileWriter fileWriter = new FileWriter(getPlugin().getDataFolder() + "/Clans/" + clan.getName() + ".json")) {
-            fileWriter.write(jsonObject.toString());
-            fileWriter.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(jsonObject);
-    }
-
-    public synchronized void loadClans() {
-        final File parent = new File(getPlugin().getDataFolder() + "/Clans/");
-
-        if (!parent.exists()) {
-            parent.mkdirs();
-        }
-
-        for (File file : parent.listFiles()) {
-            JSONParser parser = new JSONParser();
-            try {
-                JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(file));
-
-                final String clanName = jsonObject.get("name").toString();
-                final long age = (long) jsonObject.get("age");
-
-                final int energy = (int) (long) jsonObject.get("energy");
-                final boolean admin = (boolean) jsonObject.get("admin");
-                final boolean safe = (boolean) jsonObject.get("safe");
-                Location home = null;
-                try {
-                    final JSONObject homeObject = (JSONObject) jsonObject.get("home");
-                    home = new Location(Bukkit.getWorld(homeObject.get("world").toString()), (double) homeObject.get("x"), (double) homeObject.get("y"), (double) homeObject.get("z"), (float) (double) homeObject.get("yaw"), (float) (double) homeObject.get("pitch"));
-                } catch (NullPointerException ignored) {
-                }
-                final JSONArray claims = (JSONArray) jsonObject.get("territory");
-                final JSONArray members = (JSONArray) jsonObject.get("members");
-                final JSONArray alliance = (JSONArray) jsonObject.get("alliance");
-                final JSONArray enemies = (JSONArray) jsonObject.get("enemies");
-
-                final Clan clan = new Clan(clanName);
-                clan.setHome(home);
-                clan.setAge(age);
-                clan.setEnergy(energy);
-                clan.setAdmin(admin);
-                clan.setSafe(safe);
-                claims.forEach(o -> clan.getClaims().add((String) o));
-                members.forEach(o -> {
-                    JSONObject member = (JSONObject) o;
-                    clan.getMemberMap().put(UUID.fromString(member.get("uuid").toString()), Clan.MemberRole.valueOf(member.get("role").toString()));
-                });
-                alliance.forEach(o -> {
-                    JSONObject ally = (JSONObject) o;
-                    clan.getAllianceMap().put((String) ally.get("other"), (Boolean) ally.get("trusted"));
-                });
-                enemies.forEach(o -> {
-                    JSONObject enemy = (JSONObject) o;
-                    clan.getEnemyMap().put((String) enemy.get("other"), (int) (long) enemy.get("points"));
-                });
-
-                getManager(ClanManager.class).addClan(clan);
-            } catch (IOException | ParseException e) {
-                e.printStackTrace();
-            }
-        }
+        getManager().addQuery(new InsertQuery(document, this));
     }
 
     public void deleteClan(Clan clan) {
-        clan.getAllianceMap().keySet().forEach(s -> getManager(ClanManager.class).getClan(s).getAllianceMap().remove(clan.getName()));
-        clan.getEnemyMap().keySet().forEach(s -> getManager(ClanManager.class).getClan(s).getEnemyMap().remove(clan.getName()));
-
-        clan.getAllianceMap().keySet().forEach(s -> getManager(DatabaseManager.class).getModule(ClanRepository.class).updateAlliances(getManager(ClanManager.class).getClan(s)));
-        clan.getEnemyMap().keySet().forEach(s -> getManager(DatabaseManager.class).getModule(ClanRepository.class).updateEnemies(getManager(ClanManager.class).getClan(s)));
-
-        final File f = new File(getPlugin().getDataFolder() + DatabaseTypes.CLANS.getPath() + clan.getName() + ".json");
-
-        if (f.exists()) {
-            f.delete();
-        }
         getManager(ClanManager.class).getClanSet().remove(clan);
+
+        clan.getEnemyMap().forEach((s, integer) -> {
+            Clan enemy = getManager(ClanManager.class).getClan(s);
+            enemy.getEnemyMap().remove(clan.getName());
+            updateEnemies(enemy);
+        });
+
+        clan.getAllianceMap().forEach((s, aBoolean) -> {
+            Clan alliance = getManager(ClanManager.class).getClan(s);
+            alliance.getAllianceMap().remove(clan.getName());
+            updateAlliances(alliance);
+        });
+
+        getManager().addQuery(new DeleteQuery(new Document("name", clan.getName()), this));
     }
 
     public void updateMembers(Clan clan) {
-        JSONArray members = new JSONArray();
+        List<Object> members = new ArrayList<>();
         clan.getMemberMap().forEach((uuid, memberRole) -> {
-            final JSONObject member = new JSONObject();
-            member.put("uuid", uuid.toString());
-            member.put("role", memberRole.name());
+            Document member = new Document();
+            member.append("uuid", uuid.toString());
+            member.append("role", memberRole.name());
             members.add(member);
         });
+        Document doc = new Document().append("members", members);
 
-        DatabaseTypes.CLANS.SetObject(getManager(), clan.getName() + ".json", "members", members);
+        getManager().addQuery(new UpdateQuery(doc, this, new Document().append("name", clan.getName())));
     }
 
     public void updateEnergy(Clan clan) {
-        DatabaseTypes.CLANS.SetObject(getManager(), clan.getName() + ".json", "energy", clan.getEnergy());
+        Document document = new Document();
+        document.append("energy", clan.getEnergy());
+
+        getManager().addQuery(new UpdateQuery(document, this, new Document().append("name", clan.getName())));
     }
 
     public void updateEnemies(Clan clan) {
-        JSONArray enemies = new JSONArray();
-        clan.getEnemyMap().forEach((other, points) -> {
-            final JSONObject member = new JSONObject();
-            member.put("other", other);
-            member.put("points", points);
-            enemies.add(member);
+        List<Object> enemies = new ArrayList<>();
+        clan.getEnemyMap().forEach((s, Integer) -> {
+            Document enemy = new Document();
+            enemy.append("other", s);
+            enemy.append("points", Integer);
+            enemies.add(enemy);
         });
+        Document doc = new Document().append("enemies", enemies);
 
-        DatabaseTypes.CLANS.SetObject(getManager(), clan.getName() + ".json", "enemies", enemies);
+        getManager().addQuery(new UpdateQuery(doc, this, new Document().append("name", clan.getName())));
     }
 
     public void updateAlliances(Clan clan) {
-        JSONArray alliance = new JSONArray();
-        clan.getAllianceMap().forEach((other, trusted) -> {
-            final JSONObject member = new JSONObject();
-            member.put("other", other);
-            member.put("trusted", trusted);
-            alliance.add(member);
+        List<Object> alliances = new ArrayList<>();
+        clan.getAllianceMap().forEach((s, aBoolean) -> {
+            Document alliance = new Document();
+            alliance.append("other", s);
+            alliance.append("trusted", aBoolean);
+            alliances.add(alliance);
         });
+        Document doc = new Document().append("alliances", alliances);
 
-        DatabaseTypes.CLANS.SetObject(getManager(), clan.getName() + ".json", "alliance", alliance);
+        getManager().addQuery(new UpdateQuery(doc, this, new Document().append("name", clan.getName())));
     }
 
     public void updateClaims(Clan clan) {
-        JSONArray claims = new JSONArray();
-        claims.addAll(clan.getClaims());
-
-        DatabaseTypes.CLANS.SetObject(getManager(), clan.getName() + ".json", "territory", claims);
+        Document document = new Document();
+        document.append("claims", clan.getClaims());
+        getManager().addQuery(new UpdateQuery(document, this, new Document().append("name", clan.getName())));
     }
 
     public void updateHome(Clan clan) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("world", clan.getHome() == null ? null : clan.getHome().getWorld().getName());
-        jsonObject.put("x", clan.getHome() == null ? null : clan.getHome().getX());
-        jsonObject.put("y", clan.getHome() == null ? null : clan.getHome().getY());
-        jsonObject.put("z", clan.getHome() == null ? null : clan.getHome().getZ());
-        jsonObject.put("pitch", clan.getHome() == null ? null : clan.getHome().getPitch());
-        jsonObject.put("yaw", clan.getHome() == null ? null : clan.getHome().getYaw());
+        Document homeObject = new Document();
+        homeObject.append("world", clan.getHome() == null ? null : clan.getHome().getWorld().getName());
+        homeObject.append("x", clan.getHome() == null ? null : clan.getHome().getX());
+        homeObject.append("y", clan.getHome() == null ? null : clan.getHome().getY());
+        homeObject.append("z", clan.getHome() == null ? null : clan.getHome().getZ());
+        homeObject.append("pitch", clan.getHome() == null ? null : clan.getHome().getPitch());
+        homeObject.append("yaw", clan.getHome() == null ? null : clan.getHome().getYaw());
+        getManager().addQuery(new UpdateQuery(new Document().append("home", homeObject), this, new Document().append("name", clan.getName())));
+    }
 
-        DatabaseTypes.CLANS.SetObject(getManager(), clan.getName() + ".json", "home", jsonObject);
+    @Override
+    public MongoCollection<Document> getMongoCollection() {
+        return getMongoDatabase().getCollection("clans");
     }
 }

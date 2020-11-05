@@ -3,12 +3,12 @@ package com.areeoh.clans.clans.commands.subcommands;
 import com.areeoh.clans.clans.events.ClanClaimEvent;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.core.client.Client;
-import com.areeoh.core.client.ClientManager;
-import com.areeoh.core.framework.commands.Command;
-import com.areeoh.core.framework.commands.CommandManager;
-import com.areeoh.core.utility.UtilFormat;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.client.Client;
+import com.areeoh.spigot.core.client.ClientManager;
+import com.areeoh.spigot.core.framework.commands.Command;
+import com.areeoh.spigot.core.framework.commands.CommandManager;
+import com.areeoh.spigot.core.utility.UtilFormat;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -33,7 +33,7 @@ public class ClanClaimCommand extends Command<Player> {
             UtilMessage.message(player, "Clans", "You are not in a Clan.");
             return false;
         }
-        final Client client = getManager(ClientManager.class).getClient(player.getUniqueId());
+        final Client client = getManager(ClientManager.class).getOnlineClient(player.getUniqueId());
         if(!client.isAdministrating()) {
             if (player.getWorld().getEnvironment() != World.Environment.NORMAL) {
                 UtilMessage.message(player, "Clans", "You can only claim in the overworld.");

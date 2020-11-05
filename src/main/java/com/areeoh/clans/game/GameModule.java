@@ -1,7 +1,7 @@
 package com.areeoh.clans.game;
 
 
-import com.areeoh.core.framework.Module;
+import com.areeoh.spigot.core.framework.Module;
 
 public abstract class GameModule extends Module<GameManager> {
 

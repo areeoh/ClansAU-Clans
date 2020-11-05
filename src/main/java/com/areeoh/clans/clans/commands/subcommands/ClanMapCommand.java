@@ -1,9 +1,9 @@
 package com.areeoh.clans.clans.commands.subcommands;
 
-import com.areeoh.core.framework.commands.Command;
-import com.areeoh.core.framework.commands.CommandManager;
-import com.areeoh.core.utility.UtilItem;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.framework.commands.Command;
+import com.areeoh.spigot.core.framework.commands.CommandManager;
+import com.areeoh.spigot.core.utility.UtilItem;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

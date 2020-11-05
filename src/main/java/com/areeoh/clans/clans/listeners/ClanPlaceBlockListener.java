@@ -2,10 +2,10 @@ package com.areeoh.clans.clans.listeners;
 
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.core.client.ClientManager;
-import com.areeoh.core.framework.Module;
-import com.areeoh.core.utility.UtilFormat;
-import com.areeoh.core.utility.UtilMessage;
+import com.areeoh.spigot.core.client.ClientManager;
+import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.core.utility.UtilFormat;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import com.areeoh.clans.pillaging.PillageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -39,7 +39,7 @@ public class ClanPlaceBlockListener extends Module<ClanManager> implements Liste
             if (getManager(PillageManager.class).isPillaging(clan, lClan)) {
                 return;
             }
-            if (getManager(ClientManager.class).getClient(player.getUniqueId()).isAdministrating()) {
+            if (getManager(ClientManager.class).getOnlineClient(player.getUniqueId()).isAdministrating()) {
                 return;
             }
             final ClanManager.ClanRelation clanRelation = getManager().getClanRelation(clan, lClan);

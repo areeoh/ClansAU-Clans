@@ -5,14 +5,14 @@ import com.areeoh.clans.clans.ClanManager;
 import com.areeoh.clans.clans.ClanRepository;
 import com.areeoh.clans.clans.events.ClanPillageEndEvent;
 import com.areeoh.clans.clans.events.ClanPillageStartEvent;
-import com.areeoh.core.database.DatabaseManager;
-import com.areeoh.core.framework.Module;
-import com.areeoh.core.framework.Primitive;
-import com.areeoh.core.framework.updater.Update;
-import com.areeoh.core.framework.updater.Updater;
-import com.areeoh.core.utility.UtilMessage;
 import com.areeoh.clans.pillaging.Pillage;
 import com.areeoh.clans.pillaging.PillageManager;
+import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.core.framework.Primitive;
+import com.areeoh.spigot.core.framework.updater.Update;
+import com.areeoh.spigot.core.framework.updater.Updater;
+import com.areeoh.spigot.core.repository.RepositoryManager;
+import com.areeoh.spigot.core.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -31,12 +31,12 @@ public class PillageListener extends Module<PillageManager> implements Listener,
 
     @Update
     public void onUpdate() {
-        if(getManager().getPillages().isEmpty()) {
+        if (getManager().getPillages().isEmpty()) {
             return;
         }
         for (Iterator<Pillage> it = getManager().getPillages().iterator(); it.hasNext(); ) {
             Pillage pillage = it.next();
-            if(pillage.getTimeRemaining() <= 0) {
+            if (pillage.getTimeRemaining() <= 0) {
                 it.remove();
                 Bukkit.getServer().getPluginManager().callEvent(new ClanPillageEndEvent(pillage.getPillager(), pillage.getPillagee()));
             }
@@ -45,7 +45,7 @@ public class PillageListener extends Module<PillageManager> implements Listener,
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPillage(ClanPillageStartEvent event) {
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             return;
         }
         final Clan killer = event.getPillager();
@@ -60,13 +60,13 @@ public class PillageListener extends Module<PillageManager> implements Listener,
             final ClanManager.ClanRelation deadRelation = getManager(ClanManager.class).getClanRelation(dead, getManager(ClanManager.class).getClan(online.getUniqueId()));
             UtilMessage.message(online, "Clans", clanRelation.getSuffix() + "Clan " + killer.getName() + ChatColor.GRAY + " has conquered " + deadRelation.getSuffix() + "Clan " + dead.getName() + ChatColor.GRAY + ".");
         });
-        getManager(DatabaseManager.class).getModule(ClanRepository.class).updateEnemies(killer);
-        getManager(DatabaseManager.class).getModule(ClanRepository.class).updateEnemies(dead);
+        getManager(RepositoryManager.class).getModule(ClanRepository.class).updateEnemies(killer);
+        getManager(RepositoryManager.class).getModule(ClanRepository.class).updateEnemies(dead);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPillageEnd(ClanPillageEndEvent event) {
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             return;
         }
         final Clan pillagee = event.getPillagee();
