@@ -24,7 +24,7 @@ public class ClanJoinCommand extends Command<Player> {
     public boolean execute(Player player, String[] args) {
         final Clan clan = getManager(ClanManager.class).getClan(player.getUniqueId());
         if(clan != null) {
-            UtilMessage.message(player, "Clans", "You are already in a clan.");
+            UtilMessage.message(player, "Clans", "You are already in a Clan.");
             return false;
         }
         final Clan target = getManager(ClanManager.class).searchClan(player, args[1], true);
@@ -32,7 +32,7 @@ public class ClanJoinCommand extends Command<Player> {
             return false;
         }
         if(target.getMemberMap().size() + target.getAllianceMap().size() >= 8) {
-            UtilMessage.message(player, "Clans", ChatColor.YELLOW + "Clan " + target.getName() + ChatColor.GRAY + " has too many members.");
+            UtilMessage.message(player, "Clans", ChatColor.YELLOW + "Clan " + target.getName() + ChatColor.GRAY + " has too many members/allies.");
             return false;
         }
         if (target.getInviteeMap().containsKey(player.getUniqueId()) && !UtilTime.elapsed(target.getInviteeMap().get(player.getUniqueId()), 300000)) {
@@ -45,6 +45,6 @@ public class ClanJoinCommand extends Command<Player> {
 
     @Override
     public void invalidArgsRequired(Player sender) {
-        UtilMessage.message(sender, "Clans", "You did not input a Clan to join.");
+        UtilMessage.message(sender, "Clans", "You did not input a Clan to Join.");
     }
 }
