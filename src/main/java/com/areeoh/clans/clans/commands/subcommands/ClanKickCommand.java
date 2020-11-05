@@ -33,12 +33,12 @@ public class ClanKickCommand extends Command<Player> {
         if (target == null) {
             return false;
         }
-        if (!clan.equals(getManager(ClanManager.class).getClan(target.getUUID()))) {
-            UtilMessage.message(player, "Clans", ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " is not apart of your Clan.");
-            return false;
-        }
         if(target.getUUID().equals(player.getUniqueId())) {
             UtilMessage.message(player, "Clans", "You cannot kick yourself.");
+            return false;
+        }
+        if (!clan.equals(getManager(ClanManager.class).getClan(target.getUUID()))) {
+            UtilMessage.message(player, "Clans", ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " is not apart of your Clan.");
             return false;
         }
         if (!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
