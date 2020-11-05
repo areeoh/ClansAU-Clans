@@ -31,6 +31,12 @@ public class ClanJoinCommand extends Command<Player> {
         if(target == null) {
             return false;
         }
+        /*
+        if(target.isAdmin()) {
+            UtilMessage.message(player, "Clans", "You cannot join Admin Clans.");
+            return false;
+        }
+        */
         if(target.getMemberMap().size() + target.getAllianceMap().size() >= 8) {
             UtilMessage.message(player, "Clans", ChatColor.YELLOW + "Clan " + target.getName() + ChatColor.GRAY + " has too many members/allies.");
             return false;
