@@ -36,11 +36,11 @@ public class ClanClaimCommand extends Command<Player> {
         final Client client = getManager(ClientManager.class).getOnlineClient(player.getUniqueId());
         if(!client.isAdministrating()) {
             if (player.getWorld().getEnvironment() != World.Environment.NORMAL) {
-                UtilMessage.message(player, "Clans", "You can only claim in the overworld.");
+                UtilMessage.message(player, "Clans", "You can only claim in the Overworld.");
                 return false;
             }
             if (!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
-                UtilMessage.message(player, "Clans", "You need to be a Clan admin to claim land.");
+                UtilMessage.message(player, "Clans", "You must be an Admin or higher to claim land.");
                 return false;
             }
             if (clan.getClaims().size() >= (clan.getMaxClaims())) {
@@ -49,13 +49,13 @@ public class ClanClaimCommand extends Command<Player> {
             }
         }
         if(clan.getClaims().contains(UtilFormat.chunkToString(player.getLocation().getChunk()))) {
-            UtilMessage.message(player, "Clans", "Your Clan already owns this land.");
+            UtilMessage.message(player, "Clans", "Your Clan already owns this territory.");
             return false;
         }
         final Clan target = getManager(ClanManager.class).getClan(player.getLocation().getChunk());
         if(!client.isAdministrating()) {
             if (target != null) {
-                UtilMessage.message(player, "Clans", "This land is owned by " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
+                UtilMessage.message(player, "Clans", "This Territory is owned by " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
                 return false;
             }
             HashSet<String> clanSet = new HashSet<>();
@@ -68,7 +68,7 @@ public class ClanClaimCommand extends Command<Player> {
                 }
             }
             if (clanSet.stream().anyMatch(s -> !clan.getName().equals(s))) {
-                UtilMessage.message(player, "Clans", "You cannot claim next to enemy land.");
+                UtilMessage.message(player, "Clans", "You cannot claim next to enemy territory.");
                 return false;
             }
         }
