@@ -23,21 +23,21 @@ public class ClanUnclaimCommand extends Command<Player> {
     public boolean execute(Player player, String[] args) {
         final Clan clan = getManager(ClanManager.class).getClan(player);
         if (clan == null) {
-            UtilMessage.message(player, "Clans", "You are not in a clan.");
+            UtilMessage.message(player, "Clans", "You are not in a Clan.");
             return false;
         }
         if (!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
-            UtilMessage.message(player, "Clans", "You need to be a Clan admin to un-claim land.");
+            UtilMessage.message(player, "Clans", "You must be an Admin or higher to unclaim land.");
             return false;
         }
-        final Clan ownerClan = getManager(ClanManager.class).getClan(player.getLocation().getChunk());
-        if (ownerClan == null || !ownerClan.equals(clan)) {
-            UtilMessage.message(player, "Clans", "This land is not owned by you.");
+        final Clan land = getManager(ClanManager.class).getClan(player.getLocation().getChunk());
+        if (land == null || (land != null && !land.equals(clan)) {
+            UtilMessage.message(player, "Clans", "This Territory is not owned by you.");
             return false;
         }
         if(getManager(PillageManager.class).isGettingPillaged(clan)) {
-            UtilMessage.message(player, "Clans", "You cannot unclaim land while you are getting pillaged.");
-            return true;
+            UtilMessage.message(player, "Clans", "You cannot unclaim land while you are getting Pillaged.");
+            return false;
         }
         Bukkit.getPluginManager().callEvent(new ClanUnclaimEvent(player, clan));
         return true;
