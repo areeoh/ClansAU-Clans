@@ -33,7 +33,7 @@ public class ClanTrustCommand extends Command<Player> {
             return false;
         }
         if (!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
-            UtilMessage.message(player, "Clans", "You must be an admin or higher to manage trust.");
+            UtilMessage.message(player, "Clans", "You must be an Admin or higher to trust a Clan.");
             return false;
         }
         if (clan.equals(target)) {
@@ -66,6 +66,6 @@ public class ClanTrustCommand extends Command<Player> {
 
     @Override
     public void invalidArgsRequired(Player sender) {
-        UtilMessage.message(sender, "Clans", "You did not input a clan to trust.");
+        UtilMessage.message(sender, "Clans", "You did not input a Clan to Trust.");
     }
 }
