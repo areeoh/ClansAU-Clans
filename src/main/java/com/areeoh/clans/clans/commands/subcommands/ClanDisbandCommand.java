@@ -27,11 +27,11 @@ public class ClanDisbandCommand extends Command<Player> {
             return false;
         }
         if(clan.getMemberRole(player.getUniqueId()).ordinal() < Clan.MemberRole.LEADER.ordinal()) {
-            UtilMessage.message(player, "Clans", "You must be leader to disband your Clan.");
+            UtilMessage.message(player, "Clans", "You must be Leader to disband your Clan.");
             return false;
         }
         if(getManager(PillageManager.class).isGettingPillaged(clan)) {
-            UtilMessage.message(player, "Clans", "You cannot disband while you are getting pillaged.");
+            UtilMessage.message(player, "Clans", "You cannot disband while you are getting Pillaged.");
             return false;
         }
         //TODO CHECK IF THEY ARE GETTING DOMMED
