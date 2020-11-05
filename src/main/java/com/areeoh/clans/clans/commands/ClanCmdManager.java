@@ -47,7 +47,7 @@ public class ClanCmdManager extends CommandManager {
         public BaseCommand(CommandManager manager) {
             super(manager, "BaseCommand", Player.class);
             setCommand("clan");
-            setAliases("c");
+            setAliases("c", "faction", "fac", "f", "gang");
             setIndex(0);
             setRequiredArgs(0);
         }

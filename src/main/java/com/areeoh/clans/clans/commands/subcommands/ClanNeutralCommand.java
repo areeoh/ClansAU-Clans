@@ -29,7 +29,7 @@ public class ClanNeutralCommand extends Command<Player> {
             return false;
         }
         if (!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
-            UtilMessage.message(player, "Clans", "Only the Clan Leader and Admins can manage relationships.");
+            UtilMessage.message(player, "Clans", "You must be an Admin or higher to neutral a Clan.");
             return false;
         }
         final Clan target = getManager(ClanManager.class).searchClan(player, args[1], true);
@@ -65,6 +65,6 @@ public class ClanNeutralCommand extends Command<Player> {
 
     @Override
     public void invalidArgsRequired(Player player) {
-        UtilMessage.message(player, "Clans", "You did not input a Clan to neutral.");
+        UtilMessage.message(player, "Clans", "You did not input a Clan to Neutral.");
     }
 }

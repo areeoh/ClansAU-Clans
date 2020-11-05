@@ -26,19 +26,19 @@ public class ClanKickCommand extends Command<Player> {
     public boolean execute(Player player, String[] args) {
         final Clan clan = getManager(ClanManager.class).getClan(player.getUniqueId());
         if (clan == null) {
-            UtilMessage.message(player, "Clans", "You are not in a clan.");
+            UtilMessage.message(player, "Clans", "You are not in a Clan.");
             return false;
         }
         final OfflineClient target = getManager(ClientManager.class).searchClient(player, args[1], true);
         if (target == null) {
             return false;
         }
-        if (!clan.equals(getManager(ClanManager.class).getClan(target.getUUID()))) {
-            UtilMessage.message(player, "Clans", ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " is not apart of your clan.");
-            return false;
-        }
         if(target.getUUID().equals(player.getUniqueId())) {
             UtilMessage.message(player, "Clans", "You cannot kick yourself.");
+            return false;
+        }
+        if (!clan.equals(getManager(ClanManager.class).getClan(target.getUUID()))) {
+            UtilMessage.message(player, "Clans", ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " is not apart of your Clan.");
             return false;
         }
         if (!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
@@ -46,7 +46,7 @@ public class ClanKickCommand extends Command<Player> {
             return false;
         }
         if(getManager(PillageManager.class).isGettingPillaged(clan)) {
-            UtilMessage.message(player, "Clans", "You cannot kick a player while you are getting pillaged.");
+            UtilMessage.message(player, "Clans", "You cannot kick a player while you are getting Pillaged.");
             return false;
         }
         Bukkit.getPluginManager().callEvent(new ClanKickEvent(player, target, clan));
@@ -55,6 +55,6 @@ public class ClanKickCommand extends Command<Player> {
 
     @Override
     public void invalidArgsRequired(Player sender) {
-        UtilMessage.message(sender, "Clans", "You did not input a player to kick.");
+        UtilMessage.message(sender, "Clans", "You did not input a Player to Kick.");
     }
 }

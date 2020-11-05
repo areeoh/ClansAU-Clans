@@ -29,7 +29,7 @@ public class ClanInviteCommand extends Command<Player> {
             return false;
         }
         if (!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
-            UtilMessage.message(player, "Clans", "You must be an admin or higher to invite players to your Clan.");
+            UtilMessage.message(player, "Clans", "You must be an Admin or higher to invite a Player.");
             return false;
         }
         final Player target = UtilPlayer.searchPlayer(player, args[1], true);
@@ -42,6 +42,10 @@ public class ClanInviteCommand extends Command<Player> {
         }
         final Clan c = getManager(ClanManager.class).getClan(target.getUniqueId());
         if(c != null) {
+            if(c.equals(clan)) {
+                UtilMessage.message(player, "Clans", ChatColor.AQUA + target.getName() + ChatColor.GRAY + " is already apart of your Clan.");
+                return false;
+            }
             final ClanManager.ClanRelation clanRelation = getManager(ClanManager.class).getClanRelation(clan, c);
             UtilMessage.message(player, "Clans", ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " is apart of " + clanRelation.getSuffix() + "Clan " + c.getName() + ChatColor.GRAY + ".");
             return false;
@@ -51,7 +55,7 @@ public class ClanInviteCommand extends Command<Player> {
             return false;
         }
         if(clan.getMemberMap().size() + clan.getAllianceMap().size() >= 8) {
-            UtilMessage.message(player, "Clans", "Your clan has too many members.");
+            UtilMessage.message(player, "Clans", "Your Clan has too many members/allies.");
             return false;
         }
         Bukkit.getPluginManager().callEvent(new ClanInviteEvent(player, target, clan));
@@ -60,6 +64,6 @@ public class ClanInviteCommand extends Command<Player> {
 
     @Override
     public void invalidArgsRequired(Player sender) {
-        UtilMessage.message(sender, "Clans", "You did not input a player to invite.");
+        UtilMessage.message(sender, "Clans", "You did not input a Player to Invite.");
     }
 }

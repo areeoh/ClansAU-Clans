@@ -28,7 +28,7 @@ public class ClanLeaveCommand extends Command<Player> {
             return true;
         }
         if(getManager(PillageManager.class).isGettingPillaged(clan)) {
-            UtilMessage.message(player, "Clans", "You cannot leave your Clan while you are getting pillaged.");
+            UtilMessage.message(player, "Clans", "You cannot leave your Clan while you are getting Pillaged.");
             return true;
         }
         if(clan.getMemberRole(player.getUniqueId()) == Clan.MemberRole.LEADER && clan.getMemberMap().size() == 1) {

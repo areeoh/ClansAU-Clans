@@ -34,15 +34,19 @@ public class ClanDemoteCommand extends Command<Player> {
             return false;
         }
         if(!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
-            UtilMessage.message(player, "Clans", "You must be an admin or higher to demote a player.");
+            UtilMessage.message(player, "Clans", "You must be an Admin or higher to demote a Player.");
             return false;
         }
         if(player.getUniqueId().equals(target.getUUID())) {
             UtilMessage.message(player, "Clans", "You cannot demote yourself.");
             return false;
         }
+        /*
+         Trae: If you can, do a Member Search for this class
+         Example: https://paste.md-5.net/rodepidime.java
+        */
         if(!clan.equals(getManager(ClanManager.class).getClan(target.getUUID()))) {
-            UtilMessage.message(player, "Clans", ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " is not apart of your clan.");
+            UtilMessage.message(player, "Clans", ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " is not apart of your Clan.");
             return false;
         }
         if(clan.getMemberRole(player.getUniqueId()).ordinal() <= clan.getMemberRole(target.getUUID()).ordinal()) {
@@ -59,6 +63,6 @@ public class ClanDemoteCommand extends Command<Player> {
 
     @Override
     public void invalidArgsRequired(Player sender) {
-        UtilMessage.message(sender, "Clans", "You did not input a player to demote.");
+        UtilMessage.message(sender, "Clans", "You did not input a Player to Demote.");
     }
 }

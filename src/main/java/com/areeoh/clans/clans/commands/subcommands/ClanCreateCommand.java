@@ -31,6 +31,9 @@ public class ClanCreateCommand extends Command<Player> {
             UtilMessage.message(player, "Clans", "Clan name is already used by another Clan.");
             return false;
         }
+        /*
+         Trae: Do the following if statements IF the Client is not Administrating
+        */
         if(args[1].length() < 3) {
             UtilMessage.message(player, "Clans", "Clan name is too short. Minimum length is " + ChatColor.YELLOW + "3" + ChatColor.GRAY + ".");
             return false;
@@ -44,10 +47,13 @@ public class ClanCreateCommand extends Command<Player> {
             return false;
         }
         if(getManager().getModules().stream().map(command -> command.getCommand().toLowerCase()).anyMatch(str -> str.equalsIgnoreCase(args[1]))) {
-            UtilMessage.message(player, "Clans", "Clan name cannot be a Clan command.");
+            UtilMessage.message(player, "Clans", "You cannot use that as your Clan name.");
             return false;
         }
-        //TODO ADD COOLDOWN
+        /*
+         TODO ADD COOLDOWN
+         Trae: Cooldown should probably be 10 Minutes
+        */
         final Clan clan = new Clan(args[1]);
         Bukkit.getPluginManager().callEvent(new ClanCreateEvent(player, clan));
         return true;

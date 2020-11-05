@@ -26,11 +26,11 @@ public class ClanSetHomeCommand extends Command<Player> {
             return false;
         }
         if (!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
-            UtilMessage.message(player, "Clans", "Only the Clan Leader and Admins can manage the Clan Home.");
+            UtilMessage.message(player, "Clans", "You must be an Admin or higher to set Clan Home.");
             return false;
         }
         if (getManager(ClanManager.class).getClan(player.getLocation().getChunk()) == null || !getManager(ClanManager.class).getClan(player.getLocation().getChunk()).equals(clan)) {
-            UtilMessage.message(player, "Clans", "You must set your Clan Home in your own land.");
+            UtilMessage.message(player, "Clans", "You must set your Clan Home in your own Territory.");
             return false;
         }
         if (player.getLocation().getY() < 40 || player.getLocation().getY() > 100) {
