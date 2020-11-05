@@ -41,9 +41,10 @@ public class ClanAllyCommand extends Command<Player> {
             return false;
         }
         /*
-         Trae: Make sure a few of the following if statements are IF their not Client Administrating.
-               Also make an IF statement here with the line:
-               Clans> You cannot request an alliance with Admin Clans.
+        if(target.isAdmin()) {
+            UtilMessage.message(player, "Clans", "You cannot request an alliance with Admin Clans.");
+            return false;
+        }
         */
         if(getManager(PillageManager.class).isPillaging(clan, target) || getManager(PillageManager.class).isPillaged(clan, target)) {
             UtilMessage.message(player, "Clans", "You cannot ally " + ChatColor.LIGHT_PURPLE + "Clan " + target.getName() + ChatColor.GRAY + " while a Pillage is active.");
