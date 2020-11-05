@@ -55,7 +55,7 @@ public class ClanNeutralCommand extends Command<Player> {
         if (!clan.getNeutralRequestMap().containsKey(target.getName())) {
             clan.getNeutralRequestMap().put(target.getName(), System.currentTimeMillis());
             UtilMessage.message(player, "Clans", "You requested neutrality with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
-            clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " has requested neutrality with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
+            clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has requested neutrality with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
             target.inform(true, "Clans", getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + clan.getName() + ChatColor.GRAY + " has requested neutrality with your Clan.");
             return true;
         }

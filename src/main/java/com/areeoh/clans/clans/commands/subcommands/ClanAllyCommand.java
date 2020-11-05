@@ -73,7 +73,7 @@ public class ClanAllyCommand extends Command<Player> {
         if(!clan.getAllianceRequestMap().containsKey(target.getName())) {
             clan.getAllianceRequestMap().put(target.getName(), System.currentTimeMillis());
             UtilMessage.message(player, "Clans", "You requested alliance with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
-            clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " has requested alliance with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
+            clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has requested alliance with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
             target.inform(true, "Clans", getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + clan.getName() + ChatColor.GRAY + " has requested alliance with your Clan.");
             return false;
         }

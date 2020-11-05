@@ -56,7 +56,7 @@ public class ClanTrustCommand extends Command<Player> {
         if (!clan.getTrustRequestMap().containsKey(target.getName())) {
             clan.getTrustRequestMap().put(target.getName(), System.currentTimeMillis());
             UtilMessage.message(player, "Clans", "You requested trust with " + clanRelation.getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
-            clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " has requested trust with " + clanRelation.getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
+            clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has requested trust with " + clanRelation.getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".", player.getUniqueId());
             target.inform(true, "Clans", clanRelation.getSuffix() + "Clan " + clan.getName() + ChatColor.GRAY + " has requested trust with your Clan.");
             return true;
         }
