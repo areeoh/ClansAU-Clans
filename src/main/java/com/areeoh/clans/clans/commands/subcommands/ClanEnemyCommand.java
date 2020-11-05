@@ -43,7 +43,12 @@ public class ClanEnemyCommand extends Command<Player> {
             UtilMessage.message(player, "Clans", "You are already enemies with " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
             return false;
         }
-        
+        /*
+        if(target.isAdmin()) {
+            UtilMessage.message(player, "Clans", "You cannot wage war with Admin Clans.");
+            return false;
+        }
+        */
         if(getManager(PillageManager.class).isPillaging(clan, target) || getManager(PillageManager.class).isPillaged(clan, target)) {
             UtilMessage.message(player, "Clans", "You cannot enemy " + ChatColor.LIGHT_PURPLE + "Clan " + target.getName() + ChatColor.GRAY + " while a Pillage is active.");
             return false;
