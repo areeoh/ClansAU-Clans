@@ -3,7 +3,7 @@ ClansAU Clans child plugin from ClansAU Core. Core is needed to run this plugin.
 
 Created using <a href="https://spigotmc.org" target="_blank">Spigot API</a> for Minecraft Servers.
 
-# Features
+# Clans Features
 <ul>
 <li>Clans</li>
 <li>Functioning handheld Clan map displaying Clans by chunks</li>
