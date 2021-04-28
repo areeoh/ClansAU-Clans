@@ -6,6 +6,17 @@ Created using <a href="https://spigotmc.org" target="_blank">Spigot API</a> for 
 # Clans Features
 <ul>
 <li>Clans</li>
+<li>Clan Recruits cannot break blocks or open chests</li>
+<li>Clan members or allies cannot hurt each other</li>
+<li>Leaf decay in Clan territories is disabled</li>
+<li>Iron doors act as normal doors (A way to balance out the ping)</li>
+<li>Clan energy acts as usual (1 hour of energy per hour reduced)</li>
+<li>Players are put into adventure mode when they enter another clan that isn't allied or isn't their own</li>
+<li>Other Clan members do not have access to other Clan territory</li>
+<li>Displays the current Clan territory when walking in Clan territories</li>
+<li>Players cannot be damaged in Safezones</li>
+<li>Players cannot cast Skills in Safezones</li>
+<li>TNT functions differently, Blocks have different strengths</li>
 <li>Functioning handheld Clan map displaying Clans by chunks</li>
 <li>Clan alliance/enemies/pillaging</li>
 <li>Clan creation</li>
@@ -32,7 +43,7 @@ Created using <a href="https://spigotmc.org" target="_blank">Spigot API</a> for 
 <li>Beacons are disabled</li>
 <li>Placing bedrock disabled (incase a player gets ahold of it)</li>
 <li>Blocks burning is disabled</li>
-<li>Igniting blocks is disabled</li>
+<li>Igniting blocks without flint and steel is disabled </li>
 <li>Bonemeal is disabled</li>
 <li>Brewing is disabled</li>
 <li>Buckets are disabled</li>
