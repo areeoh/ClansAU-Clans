@@ -20,7 +20,6 @@ Created using <a href="https://spigotmc.org" target="_blank">Spigot API</a> for 
 # Pillaging
 <ul>
 <li>When pillaging a clan, You and your clan have full access to their base for 15 minutes</li>
-<li>Pillaging is functionable</li>
 <li>Pillage only starts when either clan reachs above 16 points</li>
 <li>Dominance points are only given when a member of another clan kills another member of an enemied clan</li>
 </ul>
