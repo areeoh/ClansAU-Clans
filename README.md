@@ -48,7 +48,7 @@ Created using <a href="https://spigotmc.org" target="_blank">Spigot API</a> for 
 <li>Brewing is disabled</li>
 <li>Buckets are disabled</li>
 <li>Crafting Bows is disabled</li>
-<li>Crafting Compass' is disabled</li>
+<li>Crafting Compass is disabled</li>
 <li>Crafting Dispensers is disabled</li>
 <li>Crafting Fishing rods is disabled</li>
 <li>Crafting Golden Apples is disabled</li>
