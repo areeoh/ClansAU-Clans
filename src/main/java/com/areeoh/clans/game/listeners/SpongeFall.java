@@ -2,7 +2,7 @@ package com.areeoh.clans.game.listeners;
 
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
-import com.areeoh.spigot.core.combat.events.CustomDamageEvent;
+import com.areeoh.spigot.combat.events.CustomDamageEvent;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;

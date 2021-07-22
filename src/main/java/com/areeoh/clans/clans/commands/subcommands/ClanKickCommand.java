@@ -4,11 +4,11 @@ import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
 import com.areeoh.clans.clans.events.ClanKickEvent;
 import com.areeoh.clans.pillaging.PillageManager;
-import com.areeoh.spigot.core.client.ClientManager;
-import com.areeoh.spigot.core.client.OfflineClient;
-import com.areeoh.spigot.core.framework.commands.Command;
-import com.areeoh.spigot.core.framework.commands.CommandManager;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.shared.Client;
+import com.areeoh.spigot.client.ClientManager;
+import com.areeoh.spigot.framework.commands.Command;
+import com.areeoh.spigot.framework.commands.CommandManager;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ public class ClanKickCommand extends Command<Player> {
             UtilMessage.message(player, "Clans", "You are not in a Clan.");
             return false;
         }
-        final OfflineClient target = getManager(ClientManager.class).searchClient(player, args[1], true);
+        final Client target = getManager(ClanManager.class).searchMember(player, args[1], true);
         if (target == null) {
             return false;
         }
@@ -41,9 +41,15 @@ public class ClanKickCommand extends Command<Player> {
             UtilMessage.message(player, "Clans", ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " is not apart of your Clan.");
             return false;
         }
-        if (!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
-            UtilMessage.message(player, "Clans", "You do not outrank " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + ".");
-            return false;
+        if(!getManager(ClientManager.class).getClient(player.getUniqueId()).isAdministrating()) {
+            if (!clan.hasRole(player.getUniqueId(), Clan.MemberRole.ADMIN)) {
+                UtilMessage.message(player, "Clans", "Only the Clan Leader and Admins can kick members.");
+                return false;
+            }
+            if (!clan.hasRole(player.getUniqueId(), clan.getMemberRole(target.getUUID()))) {
+                UtilMessage.message(player, "Clans", "You do not outrank " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + ".");
+                return false;
+            }
         }
         if(getManager(PillageManager.class).isGettingPillaged(clan)) {
             UtilMessage.message(player, "Clans", "You cannot kick a player while you are getting Pillaged.");

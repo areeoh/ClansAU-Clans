@@ -2,10 +2,10 @@ package com.areeoh.clans.game.listeners;
 
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
-import com.areeoh.spigot.core.client.Client;
-import com.areeoh.spigot.core.client.ClientManager;
-import com.areeoh.spigot.core.framework.updater.Update;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.spigot.client.Client;
+import com.areeoh.spigot.client.ClientManager;
+import com.areeoh.spigot.framework.updater.Update;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

@@ -1,6 +1,6 @@
 package com.areeoh.clans.fishing.listeners;
 
-import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.framework.Module;
 import com.areeoh.clans.fishing.FishingManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

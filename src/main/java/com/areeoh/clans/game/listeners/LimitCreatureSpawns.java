@@ -3,7 +3,7 @@ package com.areeoh.clans.game.listeners;
 import com.areeoh.clans.clans.ClanManager;
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
-import com.areeoh.spigot.core.utility.UtilMath;
+import com.areeoh.spigot.utility.UtilMath;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

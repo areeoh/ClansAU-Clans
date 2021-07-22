@@ -3,7 +3,7 @@ package com.areeoh.clans.clans.listeners;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.events.ClanMoveEvent;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.framework.Module;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

@@ -2,6 +2,7 @@ package com.areeoh.clans.map.renderer;
 
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
+import com.areeoh.clans.clans.listeners.ClanTNTListener;
 import com.areeoh.clans.map.MapManager;
 import com.areeoh.clans.map.data.*;
 import com.areeoh.clans.map.events.MinimapExtraCursorEvent;
@@ -9,7 +10,7 @@ import com.areeoh.clans.map.events.MinimapPlayerCursorEvent;
 import com.areeoh.clans.map.nms.INMSHandler;
 import com.areeoh.clans.map.nms.MaterialMapColorInterface;
 import com.areeoh.clans.map.nms.NMSHandler;
-import com.areeoh.spigot.core.utility.UtilMath;
+import com.areeoh.spigot.utility.UtilMath;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -95,33 +96,41 @@ public class MinimapRenderer extends MapRenderer implements Listener {
                         }
                         mapCanvas.setPixel(i, j, (byte) (mapPixel.getColor() + b0));
                     } else {
-                        if (!cacheMap.containsKey(x)) {
-                            cacheMap.put(x, new TreeMap<>());
-                        }
-                        if (!cacheMap.get(x).containsKey(z)) {
-                            //IF WANT HEIGHT LIMIT JUST CHANGE THIS
-                            int y = player.getWorld().getHighestBlockYAt(x, z) + 1;
-
-                            Block b = player.getWorld().getBlockAt(x, y, z);
-
-                            if (!b.getChunk().isLoaded()) {
-                                continue;
+                        for (int k = -scale; k < scale; k++) {
+                            for (int l = -scale; l < scale; l++) {
+                                handlePixel(cacheMap, x + k, z + l, player);
                             }
-                            while (b.getY() > 0 && nms.getBlockColor(b) == nms.getColorNeutral()) {
-                                b = player.getWorld().getBlockAt(b.getX(), b.getY() - 1, b.getZ());
-                            }
-                            short avgY = 0;
-                            avgY += b.getY();
-
-                            MaterialMapColorInterface mainColor = nms.getBlockColor(b);
-
-                            cacheMap.get(x).put(z, new MapPixel((byte) (mainColor.getM() * 4), avgY));
                         }
                     }
                 }
             }
         }
         handleCursors(mapCanvas, player, scale, centerX, centerZ);
+    }
+
+    private void handlePixel(Map<Integer, Map<Integer, MapPixel>> cacheMap, int x, int z, Player player) {
+        if (!cacheMap.containsKey(x)) {
+            cacheMap.put(x, new TreeMap<>());
+        }
+        if (!cacheMap.get(x).containsKey(z)) {
+            //IF WANT HEIGHT LIMIT JUST CHANGE THIS
+            int y = player.getWorld().getHighestBlockYAt(x, z) + 1;
+
+            Block b = player.getWorld().getBlockAt(x, y, z);
+
+            if (!b.getChunk().isLoaded()) {
+                return;
+            }
+            while (b.getY() > 0 && nms.getBlockColor(b) == nms.getColorNeutral()) {
+                b = player.getWorld().getBlockAt(b.getX(), b.getY() - 1, b.getZ());
+            }
+            short avgY = 0;
+            avgY += b.getY();
+
+            MaterialMapColorInterface mainColor = nms.getBlockColor(b);
+
+            cacheMap.get(x).put(z, new MapPixel((byte) (mainColor.getM() * 4), avgY));
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -205,19 +214,15 @@ public class MinimapRenderer extends MapRenderer implements Listener {
         if (cacheMap.containsKey(x + -scale) && cacheMap.get(x + -scale).containsKey(z + -scale)) {
             return cacheMap.get(x + -scale).get(z + -scale).getAverageY();
         }
-
         if (cacheMap.containsKey(x + scale) && cacheMap.get(x + scale).containsKey(z + scale)) {
             return cacheMap.get(x + scale).get(z + scale).getAverageY();
         }
-
         if (cacheMap.containsKey(x + -scale) && cacheMap.get(x + -scale).containsKey(z + scale)) {
             return cacheMap.get(x + -scale).get(z + scale).getAverageY();
         }
-
         if (cacheMap.containsKey(x + -scale) && cacheMap.get(x + -scale).containsKey(z + scale)) {
             return cacheMap.get(x + -scale).get(z + scale).getAverageY();
         }
-
         return 0;
     }
 
@@ -268,7 +273,6 @@ public class MinimapRenderer extends MapRenderer implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockEvent(BlockBreakEvent e) {
-
         handleBlockEvent(e.getBlock());
     }
 
@@ -304,7 +308,8 @@ public class MinimapRenderer extends MapRenderer implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityExplosion(EntityExplodeEvent event) {
-        for (Block block : UtilMath.getInRadius(event.getLocation(), 4.0D, 4.0D).keySet()) {
+        double tntRadius = mapManager.getManager(ClanManager.class).getModule(ClanTNTListener.class).getPrimitiveCasted(Double.class, "TNTExplosionRadius");
+        for (Block block : UtilMath.getInRadius(event.getLocation(), tntRadius, tntRadius).keySet()) {
             handleBlockEvent(block);
         }
     }

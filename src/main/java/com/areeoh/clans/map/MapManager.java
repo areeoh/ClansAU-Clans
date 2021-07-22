@@ -1,9 +1,9 @@
 package com.areeoh.clans.map;
 
-import com.areeoh.spigot.core.framework.Manager;
-import com.areeoh.spigot.core.framework.Module;
-import com.areeoh.spigot.core.framework.Plugin;
-import com.areeoh.spigot.core.utility.UtilTime;
+import com.areeoh.spigot.framework.Manager;
+import com.areeoh.spigot.framework.Module;
+import com.areeoh.spigot.framework.Plugin;
+import com.areeoh.spigot.utility.UtilTime;
 import com.areeoh.clans.map.data.ChunkData;
 import com.areeoh.clans.map.data.MapPixel;
 import com.areeoh.clans.map.data.MapSettings;

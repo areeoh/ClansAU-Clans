@@ -2,10 +2,10 @@ package com.areeoh.clans.map.commands;
 
 import com.areeoh.clans.map.MapManager;
 import com.areeoh.clans.map.renderer.MinimapRenderer;
-import com.areeoh.spigot.core.framework.commands.Command;
-import com.areeoh.spigot.core.framework.commands.CommandManager;
-import com.areeoh.spigot.core.utility.UtilMessage;
-import com.areeoh.spigot.core.utility.UtilTime;
+import com.areeoh.spigot.framework.commands.Command;
+import com.areeoh.spigot.framework.commands.CommandManager;
+import com.areeoh.spigot.utility.UtilMessage;
+import com.areeoh.spigot.utility.UtilTime;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

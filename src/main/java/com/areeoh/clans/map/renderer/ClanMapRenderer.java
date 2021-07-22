@@ -5,7 +5,6 @@ import com.areeoh.clans.clans.ClanManager;
 import com.areeoh.clans.map.MapManager;
 import com.areeoh.clans.map.data.ChunkData;
 import com.areeoh.clans.map.data.MapSettings;
-import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -33,7 +32,7 @@ public class ClanMapRenderer extends MapRenderer {
         MapSettings.Scale s = mapSettings.getScale();
 
         final boolean hasMoved = mapManager.hasMoved(player);
-        if(!(hasMoved || mapSettings.isUpdate())) {
+        if (!(hasMoved || mapSettings.isUpdate())) {
             return;
         }
 
@@ -61,29 +60,27 @@ public class ClanMapRenderer extends MapRenderer {
         final ClanManager manager = mapManager.getManager(ClanManager.class);
 
         for (ChunkData chunkData : mapManager.clanMapData.get(player.getUniqueId())) {
-            if(!chunkData.getWorld().equals(player.getWorld().getName())) {
+            if (!chunkData.getWorld().equals(player.getWorld().getName())) {
                 continue;
             }
             final Clan clan = manager.getClan(chunkData.getClan());
-            if(clan == null) {
+            if (clan == null) {
                 continue;
             }
-
             int bx = chunkData.getX() << 4; //Chunk's actual world coord;
             int bz = chunkData.getZ() << 4; //Chunk's actual world coord;
 
-            int pX = MathHelper.floor(bx - centerX) / scale + 64; //Gets the pixel location;
-            int pZ = MathHelper.floor(bz - centerZ) / scale + 64; //Gets the pixel location;
+            int pX = (bx - centerX) / scale + 64; //Gets the pixel location;
+            int pZ = (bz - centerZ) / scale + 64; //Gets the pixel location;
 
             final boolean admin = clan.isAdmin();
+
             for (int cx = 0; cx < 16 / scale; cx++) {
                 for (int cz = 0; cz < 16 / scale; cz++) {
                     if (pX + cx >= 0 && pX + cx < 128 && pZ + cz >= 0 && pZ + cz < 128) { //Checking if its in the maps bounds;
-
                         if (s.ordinal() <= MapView.Scale.CLOSE.ordinal() || admin) {
                             mapCanvas.setPixel(pX + cz, pZ + cz, chunkData.getColor());
                         }
-
                         if (s.ordinal() < MapView.Scale.NORMAL.ordinal() || admin) {
                             if (cx == 0) {
                                 if (!chunkData.getBlockFaceSet().contains(BlockFace.WEST)) {

@@ -1,14 +1,11 @@
 package com.areeoh.clans.map.data;
 
-import org.apache.commons.lang3.Validate;
-
 public class MapPixel {
 
     protected byte color;
     private short averageY;
 
     public MapPixel(byte color, short averageY) {
-        Validate.notNull(color);
         this.color = color;
         this.averageY = averageY;
     }

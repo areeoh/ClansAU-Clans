@@ -4,9 +4,9 @@ import com.areeoh.clans.clans.events.ClanDisbandEvent;
 import com.areeoh.clans.clans.events.ClanLeaveEvent;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.framework.commands.Command;
-import com.areeoh.spigot.core.framework.commands.CommandManager;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.spigot.framework.commands.Command;
+import com.areeoh.spigot.framework.commands.CommandManager;
+import com.areeoh.spigot.utility.UtilMessage;
 import com.areeoh.clans.pillaging.PillageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -32,7 +32,7 @@ public class ClanLeaveCommand extends Command<Player> {
             return true;
         }
         if(clan.getMemberRole(player.getUniqueId()) == Clan.MemberRole.LEADER && clan.getMemberMap().size() == 1) {
-            Bukkit.getServer().getPluginManager().callEvent(new ClanDisbandEvent(player, clan));
+            Bukkit.getServer().getPluginManager().callEvent(new ClanDisbandEvent(player, clan, ClanDisbandEvent.DisbandReason.PLAYER));
             return true;
         }
         if(clan.getMemberRole(player.getUniqueId()) == Clan.MemberRole.LEADER && clan.getMemberMap().size() > 1) {

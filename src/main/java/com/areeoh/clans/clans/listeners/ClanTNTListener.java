@@ -2,14 +2,12 @@ package com.areeoh.clans.clans.listeners;
 
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.blockregen.BlockRegenManager;
-import com.areeoh.spigot.core.blockregen.listeners.BlockRegenHandler;
-import com.areeoh.spigot.core.framework.Module;
-import com.areeoh.spigot.core.framework.Primitive;
-import com.areeoh.spigot.core.utility.UtilMath;
-import javafx.util.Pair;
+import com.areeoh.spigot.blockregen.BlockRegenManager;
+import com.areeoh.spigot.blockregen.listeners.BlockRegenHandler;
+import com.areeoh.spigot.framework.Module;
+import com.areeoh.spigot.framework.Primitive;
+import com.areeoh.spigot.utility.UtilMath;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -18,46 +16,30 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Set;
 
 public class ClanTNTListener extends Module<ClanManager> implements Listener {
 
-    private Map<Pair<Material, Byte>, Pair<Material, Byte>> materialMap = new HashMap<>();
-    private Map<Location, UUID> tntMap = new HashMap<>();
+    private final Set<TNTBlock> materialMap = new HashSet<>();
 
     public ClanTNTListener(ClanManager manager) {
         super(manager, "ClanTNTListener");
-        addPrimitive("TNTExplosionRadius", new Primitive(4.0D, 4.0D));
-    }
-
-    @EventHandler
-    public void onTNTPlace(BlockPlaceEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-        if (event.getBlock().getType() != Material.TNT) {
-            return;
-        }
-        tntMap.put(event.getBlock().getLocation(), event.getPlayer().getUniqueId());
-
+        addPrimitive("TNTExplosionRadius", new Primitive(4.0D));
     }
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
         if (materialMap.isEmpty()) {
-            materialMap.put(new Pair<>(Material.SMOOTH_BRICK, (byte) 0), new Pair<>(Material.SMOOTH_BRICK, (byte) 2));
-            materialMap.put(new Pair<>(Material.RED_SANDSTONE, (byte) 2), new Pair<>(Material.RED_SANDSTONE, (byte) 0));
-            materialMap.put(new Pair<>(Material.QUARTZ_BLOCK, (byte) 0), new Pair<>(Material.QUARTZ_BLOCK, (byte) 1));
-            materialMap.put(new Pair<>(Material.NETHER_BRICK, (byte) 0), new Pair<>(Material.NETHERRACK, (byte) 0));
-            materialMap.put(new Pair<>(Material.SANDSTONE, (byte) 2), new Pair<>(Material.SANDSTONE, (byte) 0));
-            materialMap.put(new Pair<>(Material.PRISMARINE, (byte) 1), new Pair<>(Material.PRISMARINE, (byte) 0));
-            materialMap.put(new Pair<>(Material.PRISMARINE, (byte) 2), new Pair<>(Material.PRISMARINE, (byte) 1));
+            materialMap.add(new TNTBlock(Material.SMOOTH_BRICK, (byte) 0, Material.SMOOTH_BRICK, (byte) 2));
+            materialMap.add(new TNTBlock(Material.RED_SANDSTONE, (byte) 2, Material.RED_SANDSTONE, (byte) 0));
+            materialMap.add(new TNTBlock(Material.QUARTZ_BLOCK, (byte) 0, Material.QUARTZ_BLOCK, (byte) 1));
+            materialMap.add(new TNTBlock(Material.NETHER_BRICK, (byte) 0, Material.NETHERRACK, (byte) 0));
+            materialMap.add(new TNTBlock(Material.SANDSTONE, (byte) 2, Material.SANDSTONE, (byte) 0));
+            materialMap.add(new TNTBlock(Material.PRISMARINE, (byte) 1, Material.PRISMARINE, (byte) 0));
+            materialMap.add(new TNTBlock(Material.PRISMARINE, (byte) 2, Material.PRISMARINE, (byte) 1));
         }
         if (event.isCancelled()) {
             return;
@@ -79,15 +61,15 @@ public class ClanTNTListener extends Module<ClanManager> implements Listener {
             if (clan != null && clan.isAdmin()) {
                 continue;
             }
-            //if (clan != null && clan.isTNTProtected()) {
-            //continue;
-            //}
+            if (clan != null && clan.isTNTProtected()) {
+                continue;
+            }
             if (getManager(BlockRegenManager.class).getModule(BlockRegenHandler.class).getBlockDataMap().containsKey(block)) {
                 continue;
             }
-            for (Map.Entry<Pair<Material, Byte>, Pair<Material, Byte>> entry : materialMap.entrySet()) {
-                if (block.getType() == entry.getKey().getKey() && block.getData() == entry.getKey().getValue()) {
-                    block.setTypeIdAndData(entry.getValue().getKey().getId(), entry.getValue().getValue(), true);
+            for (TNTBlock entry : materialMap) {
+                if (block.getType() == entry.getFromMaterial() && block.getData() == entry.getFromID()) {
+                    block.setTypeIdAndData(entry.getToMaterial().getId(), entry.getToID(), true);
                     continue bLoop;
                 }
             }
@@ -110,6 +92,37 @@ public class ClanTNTListener extends Module<ClanManager> implements Listener {
                 }
                 clan.playSound(Sound.NOTE_PLING, 1.0F, 1.0F);
             }
+        }
+    }
+
+    class TNTBlock {
+
+        private final Material fromMaterial;
+        private final byte fromID;
+        private final Material toMaterial;
+        private final byte toID;
+
+        public TNTBlock(Material fromMaterial, byte fromID, Material toMaterial, byte toID) {
+            this.fromMaterial = fromMaterial;
+            this.fromID = fromID;
+            this.toMaterial = toMaterial;
+            this.toID = toID;
+        }
+
+        public Material getFromMaterial() {
+            return fromMaterial;
+        }
+
+        public byte getFromID() {
+            return fromID;
+        }
+
+        public Material getToMaterial() {
+            return toMaterial;
+        }
+
+        public byte getToID() {
+            return toID;
         }
     }
 }

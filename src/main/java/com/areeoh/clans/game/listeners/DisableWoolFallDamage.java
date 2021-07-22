@@ -1,6 +1,6 @@
 package com.areeoh.clans.game.listeners;
 
-import com.areeoh.spigot.core.combat.events.CustomDamageEvent;
+import com.areeoh.spigot.combat.events.CustomDamageEvent;
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
 import org.bukkit.Material;

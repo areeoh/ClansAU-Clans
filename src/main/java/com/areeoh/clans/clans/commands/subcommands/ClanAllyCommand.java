@@ -1,13 +1,13 @@
 package com.areeoh.clans.clans.commands.subcommands;
 
-import com.areeoh.clans.clans.events.ClanAllyEvent;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.framework.commands.Command;
-import com.areeoh.spigot.core.framework.commands.CommandManager;
-import com.areeoh.spigot.core.utility.UtilMessage;
-import com.areeoh.spigot.core.utility.UtilTime;
+import com.areeoh.clans.clans.events.ClanAllyEvent;
 import com.areeoh.clans.pillaging.PillageManager;
+import com.areeoh.spigot.framework.commands.Command;
+import com.areeoh.spigot.framework.commands.CommandManager;
+import com.areeoh.spigot.utility.UtilMessage;
+import com.areeoh.spigot.utility.UtilTime;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -40,12 +40,10 @@ public class ClanAllyCommand extends Command<Player> {
             UtilMessage.message(player, "Clans", "You cannot request an alliance with yourself.");
             return false;
         }
-        /*
         if(target.isAdmin()) {
             UtilMessage.message(player, "Clans", "You cannot request an alliance with Admin Clans.");
             return false;
         }
-        */
         if(getManager(PillageManager.class).isPillaging(clan, target) || getManager(PillageManager.class).isPillaged(clan, target)) {
             UtilMessage.message(player, "Clans", "You cannot ally " + ChatColor.LIGHT_PURPLE + "Clan " + target.getName() + ChatColor.GRAY + " while a Pillage is active.");
             return false;

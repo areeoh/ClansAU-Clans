@@ -1,6 +1,6 @@
 package com.areeoh.clans.fishing;
 
-import com.areeoh.spigot.core.utility.UtilFormat;
+import com.areeoh.spigot.utility.UtilFormat;
 
 public enum Fish {
 

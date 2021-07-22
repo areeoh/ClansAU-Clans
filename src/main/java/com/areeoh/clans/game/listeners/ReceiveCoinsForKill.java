@@ -2,10 +2,10 @@ package com.areeoh.clans.game.listeners;
 
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
-import com.areeoh.spigot.core.client.Client;
-import com.areeoh.spigot.core.client.ClientManager;
-import com.areeoh.spigot.core.utility.UtilMath;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.spigot.client.Client;
+import com.areeoh.spigot.client.ClientManager;
+import com.areeoh.spigot.utility.UtilMath;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,6 +35,6 @@ public class ReceiveCoinsForKill extends GameModule implements Listener {
         //client.getGamer().addCoins(amount);
         //getManager(ClanScoreboardManager.class).getModule(SideBarHandler.class).updateSideBar(killer);
         //getManager(DatabaseManager.class).getModule(ClientRepository.class).saveGamer(client);
-        UtilMessage.message(event.getEntity().getKiller(), "Kill Reward", "You received " + ChatColor.YELLOW + "$" + amount + ChatColor.GRAY + " for killing " + ChatColor.GREEN + event.getEntity().getName() + ChatColor.GRAY + ".");
+        UtilMessage.message(event.getEntity().getKiller(), "Kill Reward", "You received " + ChatColor.YELLOW + "$" + amount + ChatColor.GRAY + " for killing a " + ChatColor.GREEN + event.getEntity().getName() + ChatColor.GRAY + ".");
     }
 }

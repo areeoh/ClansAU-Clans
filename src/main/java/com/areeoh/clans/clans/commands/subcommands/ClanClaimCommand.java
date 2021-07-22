@@ -1,14 +1,14 @@
 package com.areeoh.clans.clans.commands.subcommands;
 
-import com.areeoh.clans.clans.events.ClanClaimEvent;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.client.Client;
-import com.areeoh.spigot.core.client.ClientManager;
-import com.areeoh.spigot.core.framework.commands.Command;
-import com.areeoh.spigot.core.framework.commands.CommandManager;
-import com.areeoh.spigot.core.utility.UtilFormat;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.clans.clans.events.ClanClaimEvent;
+import com.areeoh.spigot.client.Client;
+import com.areeoh.spigot.client.ClientManager;
+import com.areeoh.spigot.framework.commands.Command;
+import com.areeoh.spigot.framework.commands.CommandManager;
+import com.areeoh.spigot.utility.UtilFormat;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -16,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class ClanClaimCommand extends Command<Player> {
 
@@ -34,7 +35,9 @@ public class ClanClaimCommand extends Command<Player> {
             return false;
         }
         final Client client = getManager(ClientManager.class).getOnlineClient(player.getUniqueId());
-        if(!client.isAdministrating()) {
+        boolean admin = client.isAdministrating();
+        Chunk chunk = player.getLocation().getChunk();
+        if(!admin) {
             if (player.getWorld().getEnvironment() != World.Environment.NORMAL) {
                 UtilMessage.message(player, "Clans", "You can only claim in the Overworld.");
                 return false;
@@ -48,20 +51,20 @@ public class ClanClaimCommand extends Command<Player> {
                 return false;
             }
         }
-        if(clan.getClaims().contains(UtilFormat.chunkToString(player.getLocation().getChunk()))) {
+        if(clan.getClaims().contains(UtilFormat.chunkToString(chunk))) {
             UtilMessage.message(player, "Clans", "Your Clan already owns this land.");
             return false;
         }
-        final Clan target = getManager(ClanManager.class).getClan(player.getLocation().getChunk());
-        if(!client.isAdministrating()) {
+        final Clan target = getManager(ClanManager.class).getClan(chunk);
+        if(!admin) {
             if (target != null) {
                 UtilMessage.message(player, "Clans", "This Territory is owned by " + getManager(ClanManager.class).getClanRelation(clan, target).getSuffix() + "Clan " + target.getName() + ChatColor.GRAY + ".");
                 return false;
             }
-            HashSet<String> clanSet = new HashSet<>();
+            Set<String> clanSet = new HashSet<>();
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
-                    final Chunk lChunk = player.getWorld().getChunkAt(player.getLocation().getChunk().getX() + x, player.getLocation().getChunk().getZ() + z);
+                    final Chunk lChunk = player.getWorld().getChunkAt(chunk.getX() + x, chunk.getZ() + z);
                     if (getManager(ClanManager.class).getClan(lChunk) != null) {
                         clanSet.add(getManager(ClanManager.class).getClan(lChunk).getName());
                     }
@@ -75,15 +78,15 @@ public class ClanClaimCommand extends Command<Player> {
         if(clan.getClaims().size() > 0) {
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
-                    final Chunk lChunk = player.getWorld().getChunkAt(player.getLocation().getChunk().getX() + x, player.getLocation().getChunk().getZ() + z);
+                    final Chunk lChunk = player.getWorld().getChunkAt(chunk.getX() + x, chunk.getZ() + z);
                     if(getManager(ClanManager.class).getClan(lChunk) != null) {
-                        Bukkit.getServer().getPluginManager().callEvent(new ClanClaimEvent(player, clan));
+                        Bukkit.getServer().getPluginManager().callEvent(new ClanClaimEvent(player, chunk, clan, !admin, true));
                         return true;
                     }
                 }
             }
         } else {
-            Bukkit.getServer().getPluginManager().callEvent(new ClanClaimEvent(player, clan));
+            Bukkit.getServer().getPluginManager().callEvent(new ClanClaimEvent(player, chunk, clan, !admin, true));
             return true;
         }
         UtilMessage.message(player, "Clans", "You need to claim next to your own territory.");

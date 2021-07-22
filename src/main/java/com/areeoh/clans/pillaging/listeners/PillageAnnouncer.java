@@ -1,9 +1,9 @@
 package com.areeoh.clans.pillaging.listeners;
 
-import com.areeoh.spigot.core.framework.Module;
-import com.areeoh.spigot.core.framework.updater.Update;
-import com.areeoh.spigot.core.framework.updater.Updater;
-import com.areeoh.spigot.core.utility.UtilTime;
+import com.areeoh.spigot.framework.Module;
+import com.areeoh.spigot.framework.updater.Update;
+import com.areeoh.spigot.framework.updater.Updater;
+import com.areeoh.spigot.utility.UtilTime;
 import com.areeoh.clans.pillaging.Pillage;
 import com.areeoh.clans.pillaging.PillageManager;
 import org.bukkit.ChatColor;

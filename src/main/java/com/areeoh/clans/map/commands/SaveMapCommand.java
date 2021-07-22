@@ -1,8 +1,8 @@
 package com.areeoh.clans.map.commands;
 
 import com.areeoh.clans.map.MapManager;
-import com.areeoh.spigot.core.framework.commands.Command;
-import com.areeoh.spigot.core.framework.commands.CommandManager;
+import com.areeoh.spigot.framework.commands.Command;
+import com.areeoh.spigot.framework.commands.CommandManager;
 import org.bukkit.entity.Player;
 
 public class SaveMapCommand extends Command<Player> {

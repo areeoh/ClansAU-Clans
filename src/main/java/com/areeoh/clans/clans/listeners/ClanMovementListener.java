@@ -3,8 +3,8 @@ package com.areeoh.clans.clans.listeners;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.events.ClanMoveEvent;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.framework.Module;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.spigot.framework.Module;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -43,10 +43,10 @@ public class ClanMovementListener extends Module<ClanManager> implements Listene
 
         final Player player = event.getPlayer();
         final Location location = event.getLocTo();
-        UtilMessage.message(player, "Territory", getTerritoryString(player, location));
+        UtilMessage.message(player, "Territory", getTerritoryString(player, location, false));
     }
 
-    public String getTerritoryString(Player player, Location location) {
+    public String getTerritoryString(Player player, Location location, boolean sidebar) {
         String owner = ChatColor.YELLOW + "Wilderness";
         String append = "";
         final Clan clan = getManager(ClanManager.class).getClan(player.getUniqueId());
@@ -72,7 +72,9 @@ public class ClanMovementListener extends Module<ClanManager> implements Listene
                 }
             }
             if(target.getName().equalsIgnoreCase("Fields") || target.getName().equalsIgnoreCase("Lake")) {
-                append = ChatColor.RED.toString() + ChatColor.BOLD + "                    Warning! " + ChatColor.GRAY.toString() + ChatColor.BOLD + "PvP Hotspot";
+                if(!sidebar) {
+                    append = ChatColor.RED.toString() + ChatColor.BOLD + "                    Warning! " + ChatColor.GRAY.toString() + ChatColor.BOLD + "PvP Hotspot";
+                }
             }
         }
         return owner + " " + append;

@@ -1,8 +1,8 @@
 package com.areeoh.clans.clans.listeners;
 
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.framework.Module;
-import com.areeoh.spigot.core.recharge.RechargeManager;
+import com.areeoh.spigot.framework.Module;
+import com.areeoh.spigot.recharge.RechargeManager;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.PacketPlayOutAnimation;
 import org.bukkit.Effect;

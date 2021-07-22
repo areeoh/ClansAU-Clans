@@ -1,6 +1,6 @@
 package com.areeoh.clans.game.listeners;
 
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.spigot.utility.UtilMessage;
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
 import org.bukkit.Material;

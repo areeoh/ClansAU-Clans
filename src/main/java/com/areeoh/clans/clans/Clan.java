@@ -1,6 +1,6 @@
 package com.areeoh.clans.clans;
 
-import com.areeoh.spigot.core.utility.UtilTime;
+import com.areeoh.spigot.utility.UtilTime;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,14 +19,15 @@ public class Clan {
     private boolean admin;
     private boolean safe;
     private long lastLogin;
-    private HashSet<String> claims;
-    private HashMap<UUID, Long> inviteeMap;
-    private HashMap<String, Long> allianceRequestMap;
-    private HashMap<String, Long> trustRequestMap;
-    private HashMap<String, Long> neutralRequestMap;
-    private HashMap<String, Boolean> allianceMap;
-    private HashMap<String, Integer> enemyMap;
-    private HashMap<UUID, MemberRole> memberMap;
+    private long enemyCooldown;
+    private final HashSet<String> claims;
+    private final HashMap<UUID, Long> inviteeMap;
+    private final HashMap<String, Long> allianceRequestMap;
+    private final HashMap<String, Long> trustRequestMap;
+    private final HashMap<String, Long> neutralRequestMap;
+    private final HashMap<String, Boolean> allianceMap;
+    private final HashMap<String, Integer> enemyMap;
+    private final HashMap<UUID, MemberRole> memberMap;
 
     public Clan(String name) {
         this.name = name;
@@ -36,6 +37,7 @@ public class Clan {
         this.admin = false;
         this.safe = false;
         this.lastLogin = System.currentTimeMillis();
+        this.enemyCooldown = 0L;
         this.claims = new HashSet<>();
         this.inviteeMap = new HashMap<>();
         this.allianceRequestMap = new HashMap<>();
@@ -44,6 +46,14 @@ public class Clan {
         this.allianceMap = new HashMap<>();
         this.enemyMap = new HashMap<>();
         this.memberMap = new HashMap<>();
+    }
+
+    public long getEnemyCooldown() {
+        return enemyCooldown;
+    }
+
+    public void setEnemyCooldown(long enemyCooldown) {
+        this.enemyCooldown = enemyCooldown;
     }
 
     public String getTrimmedName() {
@@ -103,6 +113,9 @@ public class Clan {
     }
 
     public String getEnergyString() {
+        if(isAdmin()) {
+            return "Unlimited";
+        }
         double days = UtilTime.trim(getHoursOfEnergy() / 24, 2);
         if(days < 1.0D) {
             return UtilTime.trim(days * 24, 2) + " Hours";

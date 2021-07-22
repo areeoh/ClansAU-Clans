@@ -1,8 +1,8 @@
 package com.areeoh.clans.game;
 
 import com.areeoh.clans.game.listeners.*;
-import com.areeoh.spigot.core.framework.Manager;
-import com.areeoh.spigot.core.framework.Plugin;
+import com.areeoh.spigot.framework.Manager;
+import com.areeoh.spigot.framework.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

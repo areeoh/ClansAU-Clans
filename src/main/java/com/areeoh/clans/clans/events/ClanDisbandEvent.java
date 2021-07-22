@@ -12,10 +12,16 @@ public class ClanDisbandEvent extends PlayerEvent implements Cancellable {
 
     private boolean isCancelled;
     private final Clan clan;
+    private final DisbandReason disbandReason;
 
-    public ClanDisbandEvent(Player player, Clan clan) {
+    public ClanDisbandEvent(Player player, Clan clan, DisbandReason disbandReason) {
         super(player);
         this.clan = clan;
+        this.disbandReason = disbandReason;
+    }
+
+    public DisbandReason getDisbandReason() {
+        return disbandReason;
     }
 
     public Clan getClan() {
@@ -39,5 +45,11 @@ public class ClanDisbandEvent extends PlayerEvent implements Cancellable {
     @Override
     public void setCancelled(boolean b) {
         this.isCancelled = b;
+    }
+
+    public enum DisbandReason {
+        ENERGY,
+        PLAYER,
+        ADMIN;
     }
 }

@@ -3,11 +3,10 @@ package com.areeoh.clans.clans.commands.subcommands;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
 import com.areeoh.clans.clans.events.ClanPromoteEvent;
-import com.areeoh.spigot.core.client.ClientManager;
-import com.areeoh.spigot.core.client.OfflineClient;
-import com.areeoh.spigot.core.framework.commands.Command;
-import com.areeoh.spigot.core.framework.commands.CommandManager;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.shared.Client;
+import com.areeoh.spigot.framework.commands.Command;
+import com.areeoh.spigot.framework.commands.CommandManager;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -28,7 +27,7 @@ public class ClanPromoteCommand extends Command<Player> {
             UtilMessage.message(player, "Clans", "You are not in a Clan.");
             return false;
         }
-        final OfflineClient target = getManager(ClientManager.class).searchClient(player, args[1], true);
+        Client target = getManager(ClanManager.class).searchMember(player, args[1], true);
         if(target == null) {
             return false;
         }

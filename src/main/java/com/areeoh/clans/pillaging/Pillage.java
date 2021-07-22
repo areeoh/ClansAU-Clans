@@ -32,7 +32,7 @@ public class Pillage {
     public void setLastAnnounce(long lastAnnounce) { this.lastAnnounce = lastAnnounce; }
 
     public long getTimeRemaining() {
-        return getStart() + getLength() - System.currentTimeMillis();
+        return Math.max(0, getStart() + getLength() - System.currentTimeMillis());
     }
 
     public long getLength() {

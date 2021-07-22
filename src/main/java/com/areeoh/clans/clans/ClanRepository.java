@@ -1,10 +1,10 @@
 package com.areeoh.clans.clans;
 
-import com.areeoh.spigot.core.framework.Repository;
-import com.areeoh.spigot.core.repository.DeleteQuery;
-import com.areeoh.spigot.core.repository.InsertQuery;
-import com.areeoh.spigot.core.repository.RepositoryManager;
-import com.areeoh.spigot.core.repository.UpdateQuery;
+import com.areeoh.spigot.framework.Repository;
+import com.areeoh.spigot.repository.DeleteQuery;
+import com.areeoh.spigot.repository.InsertQuery;
+import com.areeoh.spigot.repository.RepositoryManager;
+import com.areeoh.spigot.repository.UpdateQuery;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;

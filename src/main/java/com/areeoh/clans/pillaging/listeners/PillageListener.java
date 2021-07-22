@@ -7,12 +7,12 @@ import com.areeoh.clans.clans.events.ClanPillageEndEvent;
 import com.areeoh.clans.clans.events.ClanPillageStartEvent;
 import com.areeoh.clans.pillaging.Pillage;
 import com.areeoh.clans.pillaging.PillageManager;
-import com.areeoh.spigot.core.framework.Module;
-import com.areeoh.spigot.core.framework.Primitive;
-import com.areeoh.spigot.core.framework.updater.Update;
-import com.areeoh.spigot.core.framework.updater.Updater;
-import com.areeoh.spigot.core.repository.RepositoryManager;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.spigot.framework.Module;
+import com.areeoh.spigot.framework.Primitive;
+import com.areeoh.spigot.framework.updater.Update;
+import com.areeoh.spigot.framework.updater.Updater;
+import com.areeoh.spigot.repository.RepositoryManager;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -26,7 +26,7 @@ public class PillageListener extends Module<PillageManager> implements Listener,
     public PillageListener(PillageManager manager) {
         super(manager, "PillageListener");
 
-        addPrimitive("PillageTimeLength", new Primitive(900000L, 900000L));
+        addPrimitive("PillageTimeLength", new Primitive(900000L));
     }
 
     @Update
@@ -73,5 +73,6 @@ public class PillageListener extends Module<PillageManager> implements Listener,
         final Clan pillager = event.getPillager();
         pillagee.inform(true, "Clans", "The Pillage on your Clan has finished!");
         pillager.inform(true, "Clans", "The Pillage on " + ChatColor.YELLOW + "Clan " + pillagee.getName() + ChatColor.GRAY + " has finished!");
+        pillagee.setEnemyCooldown(System.currentTimeMillis());
     }
 }

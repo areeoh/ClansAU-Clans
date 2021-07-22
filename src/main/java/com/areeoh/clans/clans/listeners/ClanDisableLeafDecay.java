@@ -1,7 +1,7 @@
 package com.areeoh.clans.clans.listeners;
 
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.framework.Module;
+import com.areeoh.spigot.framework.Module;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.LeavesDecayEvent;

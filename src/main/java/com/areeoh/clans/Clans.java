@@ -2,6 +2,8 @@ package com.areeoh.clans;
 
 import com.areeoh.clans.clans.ClanManager;
 import com.areeoh.clans.clans.ClanRepository;
+import com.areeoh.clans.clans.commands.AllyChatCommandManager;
+import com.areeoh.clans.clans.commands.ClanChatCommandManager;
 import com.areeoh.clans.clans.commands.ClanCmdManager;
 import com.areeoh.clans.fishing.FishingManager;
 import com.areeoh.clans.game.GameManager;
@@ -9,45 +11,36 @@ import com.areeoh.clans.map.MapManager;
 import com.areeoh.clans.map.commands.MapCommandManager;
 import com.areeoh.clans.pillaging.PillageManager;
 import com.areeoh.clans.scoreboard.ClanScoreboard;
-import com.areeoh.spigot.core.ClansAUCore;
-import com.areeoh.spigot.core.framework.Manager;
-import com.areeoh.spigot.core.framework.Plugin;
-import com.areeoh.spigot.core.repository.RepositoryManager;
-import com.areeoh.spigot.core.scoreboard.ScoreboardManager;
-import org.bukkit.Bukkit;
-
-import java.util.Set;
+import com.areeoh.clans.shops.ShopManager;
+import com.areeoh.clans.shops.ShopRepository;
+import com.areeoh.clans.shops.commands.ShopCommandManager;
+import com.areeoh.clans.world.SpawnCommandManager;
+import com.areeoh.spigot.framework.Plugin;
+import com.areeoh.spigot.repository.RepositoryManager;
+import com.areeoh.spigot.scoreboard.ScoreboardManager;
 
 public class Clans extends Plugin {
 
-    private ClansAUCore plugin;
-
     @Override
-    public void onEnable() {
-        this.plugin = (ClansAUCore) Bukkit.getServer().getPluginManager().getPlugin("ClansAU-Core");
+    public void registerManagers() {
+        addModuleToManager(new ClanScoreboard(getManager(ScoreboardManager.class)), getManager(ScoreboardManager.class));
 
-        final ClanScoreboard clanScoreboard = new ClanScoreboard(plugin.getManager(ScoreboardManager.class));
-        addModuleToManager(clanScoreboard, getManager(ScoreboardManager.class));
-
-        registerManagers();
-    }
-
-    private void registerManagers() {
         addManager(new GameManager(this));
         addManager(new ClanManager(this));
         addManager(new PillageManager(this));
         addManager(new FishingManager(this));
         addManager(new MapManager(this));
+        addManager(new ShopManager(this));
 
         // Commands
         addManager(new ClanCmdManager(this));
+        addManager(new ClanChatCommandManager(this));
+        addManager(new AllyChatCommandManager(this));
         addManager(new MapCommandManager(this));
+        addManager(new SpawnCommandManager(this));
+        addManager(new ShopCommandManager(this));
 
-        addModuleToManager(new ClanRepository(getManager(RepositoryManager.class)), plugin.getManager(RepositoryManager.class));
-    }
-
-    @Override
-    public Set<Manager> getManagers() {
-        return plugin.getManagers();
+        addModuleToManager(new ShopRepository(getManager(RepositoryManager.class)), getManager(RepositoryManager.class));
+        addModuleToManager(new ClanRepository(getManager(RepositoryManager.class)), getManager(RepositoryManager.class));
     }
 }

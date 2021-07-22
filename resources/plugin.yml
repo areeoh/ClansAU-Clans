@@ -6,4 +6,11 @@ depend: [ClansAU-Core]
 commands:
   clan:
     aliases: [c]
+  clanchat:
+    aliases: [cc]
+  allychat:
+    aliases: [ac]
   map:
+  spawn:
+  shop:
+    aliases: [shops]

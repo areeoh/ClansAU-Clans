@@ -14,11 +14,39 @@ public class ClanClaimEvent extends PlayerEvent implements Cancellable {
     private boolean isCancelled;
     private final Chunk chunk;
     private final Clan clan;
+    private boolean outline;
+    private boolean message;
 
-    public ClanClaimEvent(Player player, Clan clan) {
+    public ClanClaimEvent(Player player, Chunk chunk, Clan clan) {
         super(player);
-        this.chunk = player.getLocation().getChunk();
+        this.chunk = chunk;
         this.clan = clan;
+        this.outline = true;
+        this.message = true;
+    }
+
+    public ClanClaimEvent(Player who, Chunk chunk, Clan clan, boolean outline, boolean message) {
+        super(who);
+        this.chunk = chunk;
+        this.clan = clan;
+        this.outline = outline;
+        this.message = message;
+    }
+
+    public boolean isMessage() {
+        return message;
+    }
+
+    public void setMessage(boolean message) {
+        this.message = message;
+    }
+
+    public boolean isOutline() {
+        return outline;
+    }
+
+    public void setOutline(boolean outline) {
+        this.outline = outline;
     }
 
     public Chunk getChunk() {

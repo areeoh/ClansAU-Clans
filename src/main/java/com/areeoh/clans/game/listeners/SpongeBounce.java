@@ -2,7 +2,7 @@ package com.areeoh.clans.game.listeners;
 
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
-import com.areeoh.spigot.core.recharge.RechargeManager;
+import com.areeoh.spigot.recharge.RechargeManager;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;

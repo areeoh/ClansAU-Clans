@@ -3,9 +3,9 @@ package com.areeoh.clans.clans.commands.subcommands;
 import com.areeoh.clans.clans.events.ClanUnclaimEvent;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.framework.commands.Command;
-import com.areeoh.spigot.core.framework.commands.CommandManager;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.spigot.framework.commands.Command;
+import com.areeoh.spigot.framework.commands.CommandManager;
+import com.areeoh.spigot.utility.UtilMessage;
 import com.areeoh.clans.pillaging.PillageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,7 +31,7 @@ public class ClanUnclaimCommand extends Command<Player> {
             return false;
         }
         final Clan land = getManager(ClanManager.class).getClan(player.getLocation().getChunk());
-        if (land == null || (land != null && !land.equals(clan)) {
+        if (land == null || !land.equals(clan)) {
             UtilMessage.message(player, "Clans", "This Territory is not owned by you.");
             return false;
         }

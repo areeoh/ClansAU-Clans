@@ -1,12 +1,14 @@
 package com.areeoh.clans.clans.commands.subcommands;
 
-import com.areeoh.clans.clans.events.ClanJoinEvent;
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.framework.commands.Command;
-import com.areeoh.spigot.core.framework.commands.CommandManager;
-import com.areeoh.spigot.core.utility.UtilMessage;
-import com.areeoh.spigot.core.utility.UtilTime;
+import com.areeoh.clans.clans.events.ClanJoinEvent;
+import com.areeoh.clans.pillaging.PillageManager;
+import com.areeoh.spigot.client.ClientManager;
+import com.areeoh.spigot.framework.commands.Command;
+import com.areeoh.spigot.framework.commands.CommandManager;
+import com.areeoh.spigot.utility.UtilMessage;
+import com.areeoh.spigot.utility.UtilTime;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -23,25 +25,30 @@ public class ClanJoinCommand extends Command<Player> {
     @Override
     public boolean execute(Player player, String[] args) {
         final Clan clan = getManager(ClanManager.class).getClan(player.getUniqueId());
-        if(clan != null) {
+        if (clan != null) {
             UtilMessage.message(player, "Clans", "You are already in a Clan.");
             return false;
         }
         final Clan target = getManager(ClanManager.class).searchClan(player, args[1], true);
-        if(target == null) {
+        if (target == null) {
             return false;
         }
-        /*
-        if(target.isAdmin()) {
-            UtilMessage.message(player, "Clans", "You cannot join Admin Clans.");
-            return false;
+        boolean admin = getManager(ClientManager.class).getClient(player.getUniqueId()).isAdministrating();
+        if (!admin) {
+            if (target.isAdmin()) {
+                UtilMessage.message(player, "Clans", "You cannot join Admin Clans.");
+                return false;
+            }
+            if (target.getMemberMap().size() + target.getAllianceMap().size() >= 8) {
+                UtilMessage.message(player, "Clans", ChatColor.YELLOW + "Clan " + target.getName() + ChatColor.GRAY + " has too many members/allies.");
+                return false;
+            }
+            if (getManager(PillageManager.class).isGettingPillaged(target)) {
+                UtilMessage.message(player, "Clans", "You cannot join a Clan while they are getting Pillaged.");
+                return false;
+            }
         }
-        */
-        if(target.getMemberMap().size() + target.getAllianceMap().size() >= 8) {
-            UtilMessage.message(player, "Clans", ChatColor.YELLOW + "Clan " + target.getName() + ChatColor.GRAY + " has too many members/allies.");
-            return false;
-        }
-        if (target.getInviteeMap().containsKey(player.getUniqueId()) && !UtilTime.elapsed(target.getInviteeMap().get(player.getUniqueId()), 300000)) {
+        if ((admin) || (target.getInviteeMap().containsKey(player.getUniqueId()) && !UtilTime.elapsed(target.getInviteeMap().get(player.getUniqueId()), 300000))) {
             Bukkit.getPluginManager().callEvent(new ClanJoinEvent(player, target));
             return true;
         }

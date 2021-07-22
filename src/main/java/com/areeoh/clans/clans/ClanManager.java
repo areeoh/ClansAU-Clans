@@ -1,37 +1,37 @@
 package com.areeoh.clans.clans;
 
 import com.areeoh.clans.clans.listeners.*;
-import com.areeoh.spigot.core.client.Client;
-import com.areeoh.spigot.core.client.ClientManager;
-import com.areeoh.spigot.core.client.OfflineClient;
-import com.areeoh.spigot.core.framework.Manager;
-import com.areeoh.spigot.core.framework.Module;
-import com.areeoh.spigot.core.framework.Plugin;
-import com.areeoh.spigot.core.utility.UtilFormat;
-import com.areeoh.spigot.core.utility.UtilMessage;
 import com.areeoh.clans.pillaging.PillageManager;
+import com.areeoh.shared.Client;
+import com.areeoh.spigot.client.ClientManager;
+import com.areeoh.spigot.framework.Manager;
+import com.areeoh.spigot.framework.Module;
+import com.areeoh.spigot.framework.Plugin;
+import com.areeoh.spigot.utility.UtilFormat;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ClanManager extends Manager<Module> {
 
     private HashSet<Clan> clanSet;
+    private Map<UUID, ChatType> chatMap;
 
     public ClanManager(Plugin plugin) {
         super(plugin, "ClansManager");
         this.clanSet = new HashSet<>();
+        this.chatMap = new HashMap<>();
     }
 
     @Override
     public void registerModules() {
         addModule(new ClanListener(this));
+        addModule(new ChatListener(this));
         addModule(new ClanMovementListener(this));
         addModule(new ClanGamemodeListener(this));
         addModule(new ClanPlaceBlockListener(this));
@@ -180,7 +180,6 @@ public class ClanManager extends Manager<Module> {
             }
             return false;
         }
-
         final Clan clan = getClan(target.getLocation());
         if(clan != null && clan.isSafe()) {
             if(inform) {
@@ -192,13 +191,32 @@ public class ClanManager extends Manager<Module> {
         return true;
     }
 
+    public final Client searchMember(final Player player, final String name, final boolean inform) {
+        final Clan clan = getClan(player.getUniqueId());
+        List<Client> members = clan.getMemberMap().keySet().stream().map(uuid -> getManager(ClientManager.class).getClient(uuid)).collect(Collectors.toCollection(ArrayList::new));
+        if(members.stream().anyMatch(client -> client.getName().equalsIgnoreCase(name))) {
+            return members.stream().filter(client -> clan.getName().equalsIgnoreCase(name)).findFirst().get();
+        }
+        members.removeIf(client -> !client.getName().toLowerCase().contains(name.toLowerCase()));
+        if(members.size() == 1) {
+            return members.get(0);
+        } else if(members.size() > 1) {
+            if(inform) {
+                UtilMessage.message(player, "Member Search", ChatColor.YELLOW.toString() + members.size() + ChatColor.GRAY + " matches found [" + members.stream().map(client -> ChatColor.YELLOW + client.getName()).collect(Collectors.joining(ChatColor.GRAY + ", ")) + ChatColor.GRAY + "]");
+            }
+        } else {
+            UtilMessage.message(player, "Member Search", ChatColor.YELLOW.toString() + members.size() + ChatColor.GRAY + " matches found [" + ChatColor.YELLOW + name + ChatColor.GRAY + "]");
+        }
+        return null;
+    }
+
     public Clan searchClan(Player player, String input, boolean sendMessage) {
         if (clanSet.stream().anyMatch(clan -> clan.getName().equalsIgnoreCase(input))) {
             return clanSet.stream().filter(clan -> clan.getName().equalsIgnoreCase(input)).findFirst().get();
         }
         ArrayList<Clan> clanList = new ArrayList<>(clanSet);
         clanList.removeIf(clan -> !clan.getName().toLowerCase().contains(input.toLowerCase()));
-        final OfflineClient client = getManager(ClientManager.class).searchClient(player, input, false);
+        final Client client = getManager(ClientManager.class).searchClient(player, input, false);
         if (client != null) {
             final Clan clan = getClan(client.getUUID());
             if (clan != null) {
@@ -210,11 +228,11 @@ public class ClanManager extends Manager<Module> {
             return clanList.get(0);
         } else if(clanList.size() > 1) {
             if (sendMessage) {
-                UtilMessage.message(player, "Clan Search", ChatColor.YELLOW.toString() + clanList.size() + ChatColor.GRAY + " Matches found [" + clanList.stream().map(clan -> getClanRelation(clan, getClan(player.getUniqueId())).getSuffix() + clan.getName()).collect(Collectors.joining(ChatColor.GRAY + ", ")) + ChatColor.GRAY + "]");
+                UtilMessage.message(player, "Clan Search", ChatColor.YELLOW.toString() + clanList.size() + ChatColor.GRAY + " matches found [" + clanList.stream().map(clan -> getClanRelation(clan, getClan(player.getUniqueId())).getSuffix() + clan.getName()).collect(Collectors.joining(ChatColor.GRAY + ", ")) + ChatColor.GRAY + "]");
             }
         } else {
             if (sendMessage) {
-                UtilMessage.message(player, "Clan Search", ChatColor.YELLOW.toString() + clanList.size() + ChatColor.GRAY + " Matches found [" + ChatColor.YELLOW + input + ChatColor.GRAY + "]");
+                UtilMessage.message(player, "Clan Search", ChatColor.YELLOW.toString() + clanList.size() + ChatColor.GRAY + " matches found [" + ChatColor.YELLOW + input + ChatColor.GRAY + "]");
             }
         }
         return null;
@@ -235,7 +253,7 @@ public class ClanManager extends Manager<Module> {
 
     public String getMemberString(Clan clan) {
         return clan.getMemberMap().entrySet().stream().map(entry -> {
-            OfflineClient client = getManager(ClientManager.class).getOfflineClient(entry.getKey());
+            Client client = getManager(ClientManager.class).getClient(entry.getKey());
 
             return ChatColor.YELLOW + entry.getValue().name().substring(0, 1) + ChatColor.WHITE + "." + (client instanceof Client ? ChatColor.GREEN : ChatColor.RED) + client.getName();
         }).collect(Collectors.joining(ChatColor.GRAY + ", "));
@@ -276,5 +294,9 @@ public class ClanManager extends Manager<Module> {
                     "TNT Protection: " + other.getTNTProtectedString()
             };
         }
+    }
+
+    public Map<UUID, ChatType> getChatMap() {
+        return chatMap;
     }
 }

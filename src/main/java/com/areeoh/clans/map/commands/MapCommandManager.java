@@ -1,10 +1,10 @@
 package com.areeoh.clans.map.commands;
 
-import com.areeoh.spigot.core.framework.Plugin;
-import com.areeoh.spigot.core.framework.commands.Command;
-import com.areeoh.spigot.core.framework.commands.CommandManager;
-import com.areeoh.spigot.core.utility.UtilItem;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.spigot.framework.Plugin;
+import com.areeoh.spigot.framework.commands.Command;
+import com.areeoh.spigot.framework.commands.CommandManager;
+import com.areeoh.spigot.utility.UtilItem;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

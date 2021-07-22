@@ -2,12 +2,12 @@ package com.areeoh.clans.clans.listeners;
 
 import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
-import com.areeoh.spigot.core.client.Client;
-import com.areeoh.spigot.core.client.ClientManager;
-import com.areeoh.spigot.core.framework.Module;
-import com.areeoh.spigot.core.utility.UtilFormat;
-import com.areeoh.spigot.core.utility.UtilMessage;
 import com.areeoh.clans.pillaging.PillageManager;
+import com.areeoh.shared.Client;
+import com.areeoh.spigot.client.ClientManager;
+import com.areeoh.spigot.framework.Module;
+import com.areeoh.spigot.utility.UtilFormat;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -49,7 +49,7 @@ public class ClanInteractListener extends Module<ClanManager> implements Listene
             if (getManager(PillageManager.class).isPillaging(clan, lClan)) {
                 return;
             }
-            final Client client = getManager(ClientManager.class).getOnlineClient(player.getUniqueId());
+            final Client client = getManager(ClientManager.class).getClient(player.getUniqueId());
             if (client.isAdministrating()) {
                 return;
             }

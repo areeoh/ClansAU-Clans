@@ -5,7 +5,7 @@ import com.areeoh.champions.role.roles.Ranger;
 import com.areeoh.clans.clans.ClanManager;
 import com.areeoh.clans.game.GameManager;
 import com.areeoh.clans.game.GameModule;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -4,12 +4,12 @@ import com.areeoh.clans.clans.Clan;
 import com.areeoh.clans.clans.ClanManager;
 import com.areeoh.clans.clans.ClanRepository;
 import com.areeoh.clans.clans.events.*;
-import com.areeoh.spigot.core.blockregen.BlockRegenManager;
-import com.areeoh.spigot.core.client.OfflineClient;
-import com.areeoh.spigot.core.framework.Module;
-import com.areeoh.spigot.core.repository.RepositoryManager;
-import com.areeoh.spigot.core.utility.UtilFormat;
-import com.areeoh.spigot.core.utility.UtilMessage;
+import com.areeoh.shared.Client;
+import com.areeoh.spigot.blockregen.BlockRegenManager;
+import com.areeoh.spigot.framework.Module;
+import com.areeoh.spigot.repository.RepositoryManager;
+import com.areeoh.spigot.utility.UtilFormat;
+import com.areeoh.spigot.utility.UtilMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -50,14 +50,18 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         if (event.isCancelled()) {
             return;
         }
+        final Player player = event.getPlayer();
         final Clan clan = event.getClan();
         final Chunk chunk = event.getChunk();
-        final Player player = event.getPlayer();
-        getManager(BlockRegenManager.class).outlineChunk(chunk, Material.GLOWSTONE);
+        if(event.isOutline()) {
+            getManager(BlockRegenManager.class).outlineChunk(chunk, Material.GLOWSTONE);
+        }
         //TODO UPDATE SCOREBOARD
         clan.getClaims().add(UtilFormat.chunkToString(chunk));
-        UtilMessage.message(player, "Clans", "You claimed land " + ChatColor.YELLOW + "(" + chunk.getX() + "," + chunk.getZ() + ")" + ChatColor.GRAY + ".");
-        clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " claimed land " + ChatColor.YELLOW + "(" + chunk.getX() + "," + chunk.getZ() + ")" + ChatColor.GRAY + ".", player.getUniqueId());
+        if(event.isMessage()) {
+            UtilMessage.message(player, "Clans", "You claimed land " + ChatColor.YELLOW + "(" + chunk.getX() + "," + chunk.getZ() + ")" + ChatColor.GRAY + ".");
+            clan.inform(true, "Clans", ChatColor.YELLOW + player.getName() + ChatColor.GRAY + " claimed land " + ChatColor.YELLOW + "(" + chunk.getX() + "," + chunk.getZ() + ")" + ChatColor.GRAY + ".", player.getUniqueId());
+        }
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateClaims(clan);
     }
 
@@ -80,7 +84,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
             return;
         }
         final Player player = event.getPlayer();
-        final OfflineClient target = event.getTarget();
+        final Client target = event.getTarget();
         final Clan clan = event.getClan();
         clan.getMemberMap().put(target.getUUID(), Clan.MemberRole.values()[clan.getMemberRole(target.getUUID()).ordinal() - 1]);
         UtilMessage.message(player, "Clans", "You demoted " + ChatColor.AQUA + target.getName() + ChatColor.GRAY + " to " + ChatColor.GREEN + UtilFormat.cleanString(clan.getMemberRole(target.getUUID()).name()) + ChatColor.GRAY + ".");
@@ -181,7 +185,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         }
         final Clan clan = event.getClan();
         final Player player = event.getPlayer();
-        final OfflineClient target = event.getTarget();
+        final Client target = event.getTarget();
 
         clan.getMemberMap().remove(target.getUUID());
         UtilMessage.message(player, "Clans", "You kicked " + ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " from the Clan.");
@@ -242,7 +246,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onClanPromote(ClanPromoteEvent event) {
-        final OfflineClient target = event.getTarget();
+        final Client target = event.getTarget();
         final Clan clan = event.getClan();
         final Player player = event.getPlayer();
 
@@ -265,7 +269,7 @@ public class ClanListener extends Module<ClanManager> implements Listener {
         final Player player = event.getPlayer();
 
         clan.setHome(player.getLocation().getBlock().getLocation());
-        UtilMessage.message(player, "Clans", "You set the Clan Home at " + ChatColor.YELLOW + "(" + (int) player.getLocation().getX() + "," + (int) player.getLocation().getZ() + ")" + ChatColor.GRAY + ".");
+        UtilMessage.message(player, "Clans", "You set the Clan Home at " + ChatColor.YELLOW + "(" + (int) player.getLocation().getX() + ", " + (int) player.getLocation().getZ() + ")" + ChatColor.GRAY + ".");
         clan.inform(true, "Clans", ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has set the Clan Home at " + ChatColor.YELLOW + "(" + (int) player.getLocation().getX() + "," + (int) player.getLocation().getZ() + ")" + ChatColor.GRAY + ".", player.getUniqueId());
         getManager(RepositoryManager.class).getModule(ClanRepository.class).updateHome(clan);
     }

@@ -6,10 +6,10 @@ import com.areeoh.clans.clans.events.ClanPillageStartEvent;
 import com.areeoh.clans.pillaging.listeners.PillageAnnouncer;
 import com.areeoh.clans.pillaging.listeners.PillageDeathListener;
 import com.areeoh.clans.pillaging.listeners.PillageListener;
-import com.areeoh.spigot.core.framework.Manager;
-import com.areeoh.spigot.core.framework.Module;
-import com.areeoh.spigot.core.framework.Plugin;
-import com.areeoh.spigot.core.repository.RepositoryManager;
+import com.areeoh.spigot.framework.Manager;
+import com.areeoh.spigot.framework.Module;
+import com.areeoh.spigot.framework.Plugin;
+import com.areeoh.spigot.repository.RepositoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
