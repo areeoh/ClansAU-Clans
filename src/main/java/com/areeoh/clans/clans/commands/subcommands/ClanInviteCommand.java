@@ -40,7 +40,7 @@ public class ClanInviteCommand extends Command<Player> {
         if (target == null) {
             return false;
         }
-        if (player.getUniqueId().equals(target.getUniqueId())) {
+        if (player.equals(player)) {
             UtilMessage.message(player, "Clans", "You cannot invite yourself.");
             return false;
         }
@@ -51,7 +51,7 @@ public class ClanInviteCommand extends Command<Player> {
                 return false;
             }
             final ClanManager.ClanRelation clanRelation = getManager(ClanManager.class).getClanRelation(clan, c);
-            UtilMessage.message(player, "Clans", ChatColor.YELLOW + target.getName() + ChatColor.GRAY + " is apart of " + clanRelation.getSuffix() + "Clan " + c.getName() + ChatColor.GRAY + ".");
+            UtilMessage.message(player, "Clans", clanRelation.getSuffix() + target.getName() + ChatColor.GRAY + " is apart of " + clanRelation.getSuffix() + "Clan " + c.getName() + ChatColor.GRAY + ".");
             return false;
         }
         if (clan.getInviteeMap().containsKey(target.getUniqueId()) && !UtilTime.elapsed(clan.getInviteeMap().get(target.getUniqueId()), 300000)) {
